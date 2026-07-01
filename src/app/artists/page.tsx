@@ -1,7 +1,7 @@
 import { ArtistExplorer } from "@/components/ArtistExplorer";
 
 export const metadata = {
-  title: "艺术家 | ART LINK",
+  title: "作品集主页 | ART LINK",
 };
 
 export default function ArtistsPage() {

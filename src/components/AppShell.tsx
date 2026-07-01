@@ -6,6 +6,7 @@ import {
   Bell,
   Bookmark,
   Building2,
+  ClipboardList,
   Home,
   Mail,
   MessageCircle,
@@ -14,6 +15,7 @@ import {
   Send,
   Sparkles,
   UserRound,
+  WandSparkles,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,22 +28,24 @@ type NavItem = {
 
 const primaryNav: NavItem[] = [
   { label: "首页", href: "/", icon: Home },
-  { label: "发现机会", href: "/opportunities", icon: Search },
-  { label: "艺术家", href: "/artists", icon: UserRound },
-  { label: "机构入口", href: "/institution-entry", icon: Building2 },
-  { label: "艺术家入口", href: "/artist-entry", icon: Sparkles },
-  { label: "社区讨论", href: "/#community", icon: MessageCircle },
-  { label: "投递记录", href: "/opportunities#applications", icon: Send },
-  { label: "我的收藏", href: "/artists#bookmarks", icon: Bookmark },
+  { label: "驻留机会", href: "/opportunities", icon: Search },
+  { label: "我的匹配", href: "/matches", icon: Sparkles },
+  { label: "申请进度", href: "/applications", icon: ClipboardList },
+  { label: "作品集主页", href: "/artists", icon: UserRound },
+  { label: "材料助手", href: "/materials", icon: WandSparkles },
+  { label: "收藏驻留", href: "/opportunities#bookmarks", icon: Bookmark },
+  { label: "机构后台", href: "/institution-entry", icon: Building2 },
+  { label: "消息中心", href: "/#community", icon: MessageCircle },
 ];
 
 const topNav = [
   { label: "首页", href: "/" },
-  { label: "发现机会", href: "/opportunities" },
-  { label: "艺术家", href: "/artists" },
-  { label: "机构", href: "/institution-entry" },
-  { label: "社区", href: "/#community" },
-  { label: "活动", href: "/opportunities" },
+  { label: "驻留机会", href: "/opportunities" },
+  { label: "我的匹配", href: "/matches" },
+  { label: "申请清单", href: "/applications" },
+  { label: "材料助手", href: "/materials" },
+  { label: "驻留指南", href: "/guide" },
+  { label: "机构发布", href: "/institution-entry" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -78,7 +82,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           className="mt-10 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 text-sm font-medium text-white transition hover:bg-zinc-800"
         >
           <Plus className="size-4" />
-          发布项目
+          发布驻留项目
         </Link>
 
         <nav className="mt-7 space-y-1">
@@ -107,13 +111,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="mt-auto rounded-2xl bg-[linear-gradient(135deg,#e2e5ff_0%,#ffe1d8_100%)] p-5">
           <p className="text-lg font-semibold">升级为会员</p>
           <p className="mt-3 text-sm leading-6 text-zinc-700">
-            解锁更多权益，获得精准推荐与展讯机会。
+            解锁驻留匹配评分、材料提醒和申请进度追踪。
           </p>
           <Link
             href="/artist-entry"
             className="mt-5 inline-flex h-10 items-center gap-2 rounded-lg bg-zinc-950 px-4 text-sm font-medium text-white"
           >
-            立即升级
+            开始匹配
             <Send className="size-4" />
           </Link>
         </div>
@@ -152,7 +156,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Search className="size-4 text-zinc-400" />
               <input
                 className="h-full flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-zinc-400"
-                placeholder="搜索展览、机构、艺术家..."
+                placeholder="搜索驻留项目、国家、机构、媒介..."
               />
               <Search className="size-4 text-zinc-400" />
             </div>
@@ -208,7 +212,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Link
         href="/institution-entry"
         className="fixed bottom-5 right-5 z-40 inline-flex size-12 items-center justify-center rounded-full bg-zinc-950 text-white shadow-xl shadow-zinc-950/20 lg:hidden"
-        aria-label="发布项目"
+        aria-label="发布驻留项目"
       >
         <Plus className="size-5" />
       </Link>

@@ -11,8 +11,8 @@ type WaitlistFormProps = {
 
 const roleLabels = {
   artist: "艺术家",
-  institution: "艺术机构",
-  curator: "策展人与合作方",
+  institution: "驻留机构",
+  curator: "项目方/导师",
 };
 
 type Role = keyof typeof roleLabels;
@@ -116,7 +116,7 @@ export function WaitlistForm({
           value={note}
           onChange={(event) => setNote(event.target.value)}
           className="min-h-24 w-full rounded-lg border border-zinc-200 bg-white px-3 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-950"
-          placeholder="例如：寻找海外驻留、发布展览征集、匹配影像艺术家"
+          placeholder="例如：寻找低成本海外驻留、发布青年艺术家驻留、准备英文 Artist Statement"
         />
       </label>
 

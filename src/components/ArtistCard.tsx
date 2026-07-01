@@ -59,7 +59,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
         href={`/artists/${artist.slug}`}
         className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-100 text-sm font-medium text-zinc-800 transition hover:bg-zinc-200"
       >
-        查看作品
+        查看作品集
         <ArrowUpRight className="size-4" />
       </Link>
     </article>

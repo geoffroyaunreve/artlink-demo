@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: ArtistDetailPageProps) {
   const artist = getArtistBySlug(slug);
 
   return {
-    title: artist ? `${artist.name} | ART LINK` : "艺术家详情 | ART LINK",
+    title: artist ? `${artist.name} 作品集 | ART LINK` : "作品集主页 | ART LINK",
   };
 }
 
@@ -46,7 +46,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
         className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-950"
       >
         <ArrowLeft className="size-4" />
-        返回艺术家列表
+        返回作品集主页
       </Link>
 
       <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
@@ -85,7 +85,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
         <div className="grid gap-8 p-6 lg:grid-cols-[minmax(0,1fr)_340px] sm:p-8">
           <div className="space-y-8">
             <section>
-              <h2 className="text-xl font-semibold">创作陈述</h2>
+              <h2 className="text-xl font-semibold">驻留申请陈述</h2>
               <p className="mt-4 text-base leading-8 text-zinc-600">
                 {artist.statement}
               </p>
@@ -121,7 +121,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
 
           <aside className="space-y-5">
             <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-              <p className="text-sm text-zinc-500">合作信息</p>
+              <p className="text-sm text-zinc-500">驻留申请条件</p>
               <div className="mt-5 space-y-4">
                 <p className="flex items-center gap-3 text-sm text-zinc-600">
                   <MapPin className="size-4 text-zinc-400" />
@@ -132,6 +132,10 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
                   {artist.discipline}
                 </p>
                 <p className="flex items-center gap-3 text-sm text-zinc-600">
+                  <Sparkles className="size-4 text-zinc-400" />
+                  {artist.careerStage} · {artist.budgetRange}
+                </p>
+                <p className="flex items-center gap-3 text-sm text-zinc-600">
                   <Languages className="size-4 text-zinc-400" />
                   {artist.languages.join(" / ")}
                 </p>
@@ -139,7 +143,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
               <div className="mt-5 flex flex-col gap-3">
                 <ActionButton label="联系艺术家" successLabel="联系请求已发送" />
                 <ActionButton
-                  label="收藏档案"
+                  label="收藏作品集"
                   successLabel="已加入收藏"
                   variant="light"
                 />
@@ -166,9 +170,9 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
       <section className="rounded-2xl border border-zinc-200 bg-white p-5">
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold">适合的项目机会</h2>
+            <h2 className="text-xl font-semibold">适合的驻留机会</h2>
             <p className="mt-1 text-sm text-zinc-500">
-              根据作品方向、城市和合作偏好生成的推荐。
+              根据媒介、阶段、预算、语言和项目条件生成的推荐。
             </p>
           </div>
           <Link
