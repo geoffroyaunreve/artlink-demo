@@ -121,8 +121,12 @@ export function OpportunityExplorer() {
           </label>
         </div>
 
-        <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_200px_200px]">
-          <div className="flex flex-wrap gap-2">
+        <div className="mt-5 space-y-4">
+          <div className="grid gap-3 lg:grid-cols-[110px_minmax(0,1fr)_180px_180px] lg:items-start">
+            <p className="pt-2 text-sm font-medium text-zinc-500">
+              按项目类别：
+            </p>
+            <div className="flex flex-wrap gap-2">
             {types.map((item) => (
               <button
                 key={item}
@@ -138,47 +142,59 @@ export function OpportunityExplorer() {
                 {item}
               </button>
             ))}
+            </div>
+
+            <label className="flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm text-zinc-600 transition focus-within:border-zinc-950">
+              <span className="shrink-0 text-xs font-medium text-zinc-500">地区</span>
+              <select
+                value={location}
+                onChange={(event) => setLocation(event.target.value)}
+                className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+              >
+                {locations.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
+
+            <label className="flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm text-zinc-600 transition focus-within:border-zinc-950">
+              <span className="shrink-0 text-xs font-medium text-zinc-500">成本</span>
+              <select
+                value={costLevel}
+                onChange={(event) =>
+                  setCostLevel(event.target.value as CostLevel | typeof allLabel)
+                }
+                className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+              >
+                {costLevels.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
           </div>
 
-          <select
-            value={location}
-            onChange={(event) => setLocation(event.target.value)}
-            className="h-10 rounded-full border border-zinc-200 bg-white px-4 text-sm text-zinc-600 outline-none focus:border-zinc-950"
-          >
-            {locations.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
-
-          <select
-            value={costLevel}
-            onChange={(event) =>
-              setCostLevel(event.target.value as CostLevel | typeof allLabel)
-            }
-            className="h-10 rounded-full border border-zinc-200 bg-white px-4 text-sm text-zinc-600 outline-none focus:border-zinc-950"
-          >
-            {costLevels.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {quickFilters.map((filter) => (
-            <button
-              key={filter.key}
-              type="button"
-              onClick={() => toggleQuickFilter(filter.key)}
-              className={cn(
-                "h-9 rounded-full border px-3 text-sm transition",
-                activeQuickFilters.includes(filter.key)
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-700"
-                  : "border-zinc-200 bg-white text-zinc-500 hover:border-zinc-400",
-              )}
-            >
-              {filter.label}
-            </button>
-          ))}
+          <div className="grid gap-3 lg:grid-cols-[110px_minmax(0,1fr)] lg:items-start">
+            <p className="pt-1.5 text-sm font-medium text-zinc-500">
+              按其他条件：
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {quickFilters.map((filter) => (
+                <button
+                  key={filter.key}
+                  type="button"
+                  onClick={() => toggleQuickFilter(filter.key)}
+                  className={cn(
+                    "h-9 rounded-full border px-3 text-sm transition",
+                    activeQuickFilters.includes(filter.key)
+                      ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                      : "border-zinc-200 bg-white text-zinc-500 hover:border-zinc-400",
+                  )}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

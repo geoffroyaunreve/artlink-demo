@@ -9,10 +9,8 @@ import {
   Compass,
   FileText,
   GraduationCap,
-  ListChecks,
   MessageCircle,
   Sparkles,
-  Target,
   Users,
   WalletCards,
 } from "lucide-react";
@@ -37,7 +35,11 @@ type SectionHeadingProps = {
   eyebrow: string;
   title: string;
   description?: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
+  hideIcon?: boolean;
+  prominent?: boolean;
+  compact?: boolean;
+  accentBar?: boolean;
   action?: ReactNode;
 };
 
@@ -46,8 +48,45 @@ function SectionHeading({
   title,
   description,
   icon: Icon,
+  hideIcon = false,
+  prominent = false,
+  compact = false,
+  accentBar = false,
   action,
 }: SectionHeadingProps) {
+  if (accentBar) {
+    return (
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-5xl">
+          <p className="inline-flex items-center gap-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700">
+            <span
+              className="h-0 w-0 border-y-[6px] border-l-[10px] border-y-transparent border-l-emerald-600"
+              aria-hidden="true"
+            />
+            {eyebrow}
+          </p>
+          <div className="mt-8 flex items-stretch gap-5">
+            <span
+              className="relative w-6 shrink-0 bg-zinc-950 after:absolute after:inset-y-0 after:right-0 after:w-1.5 after:bg-white sm:w-8 sm:after:w-2"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 className="text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">
+                {title}
+              </h2>
+              {description ? (
+                <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-500">
+                  {description}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+        {action ? <div className="shrink-0">{action}</div> : null}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
       <div className="max-w-4xl">
@@ -55,11 +94,21 @@ function SectionHeading({
           {eyebrow}
         </p>
         <div className="flex items-start gap-4">
-          <span className="mt-1 flex size-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700">
-            <Icon className="size-5" />
-          </span>
+          {!hideIcon && Icon ? (
+            <span className="mt-1 flex size-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+              <Icon className="size-5" />
+            </span>
+          ) : null}
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
+            <h2
+              className={
+                prominent
+                  ? "text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl"
+                  : compact
+                    ? "text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl"
+                  : "text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl"
+              }
+            >
               {title}
             </h2>
             {description ? (
@@ -175,12 +224,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <section className="space-y-8 lg:space-y-10">
         <SectionHeading
           eyebrow="Curated residencies"
           title="精选驻留机会"
           description="每个项目都标注成本、住宿、语言和申请资格，先看清条件，再决定是否投入申请时间。"
           icon={Compass}
+          prominent
           action={
             <Link
               href="/opportunities"
@@ -202,12 +252,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
+
+      <section className="space-y-12 lg:space-y-14">
         <SectionHeading
           eyebrow="Application workflow"
-          title="从发现驻留，到完成申请"
+          title="从发现驻留，到完成申请。"
           description="把项目理解、匹配理由、材料准备、提交状态和结果复盘放在同一条申请线里，减少错过截止日期和临时补材料的风险。"
-          icon={ListChecks}
+          prominent
+          accentBar
           action={
             <Link
               href="/applications"
@@ -250,7 +303,16 @@ export default function Home() {
 
             <div className="mt-6 grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
               <div className="rounded-3xl border border-zinc-200 bg-[#fbfaf6] p-6">
-                <p className="text-sm text-zinc-500">清单状态</p>
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-sm text-zinc-500">清单状态</p>
+                  <Link
+                    href="/applications"
+                    className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full bg-zinc-950 px-4 text-xs font-medium text-white transition hover:bg-zinc-800"
+                  >
+                    继续完成申请
+                    <ArrowRight className="size-3.5" />
+                  </Link>
+                </div>
                 <p className="mt-2 text-4xl font-semibold text-zinc-950">
                   {activeApplication.status}
                 </p>
@@ -289,12 +351,13 @@ export default function Home() {
         ) : null}
       </section>
 
-      <section className="space-y-6">
+      <section className="space-y-6 !mt-6 lg:!mt-8">
         <SectionHeading
           eyebrow="Personal matches"
           title="我的匹配"
           description="先看为什么适合，再决定是否加入申请清单。匹配结果会同时考虑作品媒介、创作阶段、预算、语言和申请条件。"
           icon={Sparkles}
+          compact
           action={
             <Link
               href="/matches"
@@ -344,12 +407,13 @@ export default function Home() {
 
       <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
 
-      <section className="space-y-6">
+      <section className="space-y-12 lg:space-y-14">
         <SectionHeading
           eyebrow="Matching logic"
-          title="我们不是简单推荐驻留，而是判断它是否真的适合你"
+          title="我们不是简单推荐驻留，而是判断它是否真的适合你。"
           description="平台不是只看作品风格，而是综合作品、履历、预算、语言、时间和项目条件进行匹配。"
-          icon={Target}
+          prominent
+          accentBar
         />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {matchDimensions.map((dimension, index) => {
@@ -380,12 +444,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <section className="space-y-6 !mt-6 lg:!mt-8">
         <SectionHeading
           eyebrow="Cost transparency"
           title="看清驻留背后的真实成本"
           description="申请前先判断费用、住宿、交通、签证、保险、制作材料和公共分享要求，避免在提交后才发现不适合自己的现实条件。"
           icon={WalletCards}
+          compact
         />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {costGroups.map((group) => (
