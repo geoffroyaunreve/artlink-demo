@@ -60,7 +60,7 @@ export function ArtistExplorer() {
               艺术家筛选
             </p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-              浏览创作者档案
+              浏览作品集主页
             </h1>
           </div>
 
@@ -70,7 +70,7 @@ export function ArtistExplorer() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               className="h-11 w-full rounded-full border border-zinc-200 bg-zinc-50 pl-10 pr-4 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-950 focus:bg-white"
-              placeholder="搜索艺术家、媒介、城市或关键词"
+              placeholder="搜索艺术家、媒介、城市或驻留方向"
             />
           </label>
         </div>
@@ -118,7 +118,7 @@ export function ArtistExplorer() {
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-zinc-500">共 {filtered.length} 位艺术家</p>
-        <p className="text-sm text-zinc-400">按作品方向和合作状态匹配</p>
+        <p className="text-sm text-zinc-400">按媒介、阶段和驻留申请方向匹配</p>
       </div>
 
       {filtered.length ? (

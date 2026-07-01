@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f6f3;
-  --foreground: #171717;
+  --background: #f7f4ee;
+  --foreground: #18181b;
 }
 
 @theme inline {
@@ -22,8 +22,8 @@ body {
 }
 
 ::selection {
-  background: #111111;
-  color: #ffffff;
+  background-color: #09090b !important;
+  color: #f4f4f5 !important;
 }
 
 .line-clamp-2 {
