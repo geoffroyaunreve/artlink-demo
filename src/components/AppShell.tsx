@@ -66,7 +66,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f7f4ee] text-zinc-950">
       <div>
-        <header className="sticky top-0 z-30 border-b border-zinc-800 bg-black/95 text-white backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-white/10 bg-black/70 text-white shadow-sm shadow-black/20 backdrop-blur-2xl">
           <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 xl:px-8">
             <Logo />
 
@@ -87,7 +87,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
 
-            <div className="ml-auto hidden h-10 w-full max-w-[420px] items-center rounded-full border border-zinc-800 bg-zinc-950 px-4 lg:flex">
+            <div className="ml-auto hidden h-10 w-full max-w-[420px] items-center rounded-full border border-white/10 bg-white/10 px-4 backdrop-blur-xl lg:flex">
               <Search className="size-4 text-zinc-500" />
               <input
                 className="h-full flex-1 bg-transparent px-3 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
@@ -113,7 +113,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </button>
               <Link
                 href="/artist-entry"
-                className="hidden items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950 py-1 pl-1 pr-3 text-sm font-medium text-zinc-200 sm:flex"
+                className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/10 py-1 pl-1 pr-3 text-sm font-medium text-zinc-200 backdrop-blur-xl sm:flex"
               >
                 <span className="flex size-8 items-center justify-center rounded-full bg-white text-zinc-950">
                   A
@@ -150,7 +150,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           {menuOpen ? (
-            <div className="border-t border-zinc-800 bg-black px-4 py-5 sm:px-6 xl:px-8">
+            <div className="border-t border-white/10 bg-black/75 px-4 py-5 shadow-lg shadow-black/20 backdrop-blur-2xl sm:px-6 xl:px-8">
               <div className="mx-auto flex max-w-3xl flex-col">
                 {extraNav.map((item) => {
                   const active = isActive(pathname, item.href);

@@ -11,7 +11,6 @@ import {
   GraduationCap,
   ListChecks,
   MessageCircle,
-  Send,
   Sparkles,
   Target,
   Users,
@@ -114,8 +113,8 @@ export default function Home() {
   ];
 
   return (
-    <div className="mx-auto max-w-[1500px] space-y-16">
-      <section className="relative min-h-[520px] overflow-hidden rounded-[32px] border border-zinc-200/80 bg-white shadow-sm shadow-zinc-200/60">
+    <div className="mx-auto max-w-[1500px] space-y-20 lg:space-y-24">
+      <section className="relative min-h-[520px] overflow-hidden rounded-[32px]">
         <Image
           src={heroImage}
           alt="驻留工作室中的当代艺术装置"
@@ -192,16 +191,14 @@ export default function Home() {
             </Link>
           }
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/70 p-4 shadow-sm shadow-zinc-200/50 sm:p-6 lg:p-8">
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {featuredResidencies.map((opportunity) => (
-              <OpportunityCard
-                key={opportunity.slug}
-                opportunity={opportunity}
-                compact
-              />
-            ))}
-          </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {featuredResidencies.map((opportunity) => (
+            <OpportunityCard
+              key={opportunity.slug}
+              opportunity={opportunity}
+              compact
+            />
+          ))}
         </div>
       </section>
 
@@ -221,74 +218,75 @@ export default function Home() {
             </Link>
           }
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7 lg:p-9">
-          <div className="grid gap-3 md:grid-cols-7">
-            {applicationFlow.map((step, index) => (
-              <div
-                key={step}
-                className="rounded-2xl border border-zinc-200 bg-white p-4"
-              >
-                <span className="mb-4 block text-xs font-medium text-zinc-400">
-                  0{index + 1}
-                </span>
-                <p className="text-sm font-semibold text-zinc-900">{step}</p>
-              </div>
-            ))}
-          </div>
+        <div className="grid gap-3 md:grid-cols-7">
+          {applicationFlow.map((step, index) => (
+            <div
+              key={step}
+              className="rounded-2xl border border-zinc-200 bg-white p-4"
+            >
+              <span className="mb-4 block text-xs font-medium text-zinc-400">
+                0{index + 1}
+              </span>
+              <p className="text-sm font-semibold text-zinc-900">{step}</p>
+            </div>
+          ))}
+        </div>
 
-          {activeOpportunity ? (
-            <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-              <div className="rounded-3xl border border-zinc-200 bg-[#fbfaf6] p-5 sm:p-6">
-                <p className="text-sm font-medium text-zinc-500">当前申请示例</p>
-                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950">
-                  {activeOpportunity.title}
-                </h3>
-                <p className="mt-2 text-sm text-zinc-500">
-                  {activeOpportunity.location} · {activeOpportunity.deadline} 截止 ·{" "}
-                  {activeOpportunity.costLevel}
-                </p>
-                <p className="mt-5 text-sm leading-7 text-zinc-600">
-                  下一步：{activeApplication.nextAction}
-                </p>
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  {activeApplication.materialProgress.map((material) => (
-                    <div
-                      key={material.name}
-                      className="rounded-2xl border border-zinc-200 bg-white p-4"
-                    >
-                      <div className="mb-2 flex justify-between gap-3 text-xs text-zinc-500">
-                        <span>{material.name}</span>
-                        <span>{material.progress ? `${material.progress}%` : "未准备"}</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-zinc-100">
-                        <div
-                          className="h-2 rounded-full bg-zinc-950"
-                          style={{ width: `${material.progress}%` }}
-                        />
-                      </div>
-                      <p className="mt-3 text-xs leading-5 text-zinc-500">
-                        {material.note}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {activeOpportunity ? (
+          <div className="rounded-3xl border border-zinc-200 bg-white p-5 sm:p-6">
+            <div className="max-w-3xl">
+              <p className="text-sm font-medium text-zinc-500">当前申请示例</p>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950">
+                {activeOpportunity.title}
+              </h3>
+              <p className="mt-2 text-sm text-zinc-500">
+                {activeOpportunity.location} · {activeOpportunity.deadline} 截止 ·{" "}
+                {activeOpportunity.costLevel}
+              </p>
+              <p className="mt-5 text-sm leading-7 text-zinc-600">
+                下一步：{activeApplication.nextAction}
+              </p>
+            </div>
 
-              <div className="rounded-3xl border border-zinc-200 bg-white p-6">
+            <div className="mt-6 grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
+              <div className="rounded-3xl border border-zinc-200 bg-[#fbfaf6] p-6">
                 <p className="text-sm text-zinc-500">清单状态</p>
-                <p className="mt-2 text-3xl font-semibold text-zinc-950">
+                <p className="mt-2 text-4xl font-semibold text-zinc-950">
                   {activeApplication.status}
                 </p>
-                <div className="mt-6 space-y-4 text-sm text-zinc-600">
+                <div className="mt-7 space-y-4 text-sm text-zinc-600">
                   <p>匹配度：{activeOpportunity.matchScore}%</p>
                   <p>申请语言：{activeOpportunity.languages.join(" / ")}</p>
                   <p>项目周期：{activeOpportunity.duration}</p>
                   <p>现实成本：{activeOpportunity.costLevel}</p>
                 </div>
               </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {activeApplication.materialProgress.map((material) => (
+                  <div
+                    key={material.name}
+                    className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm shadow-zinc-200/40"
+                  >
+                    <div className="mb-2 flex justify-between gap-3 text-xs text-zinc-500">
+                      <span>{material.name}</span>
+                      <span>{material.progress ? `${material.progress}%` : "未准备"}</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-zinc-100">
+                      <div
+                        className="h-2 rounded-full bg-zinc-950"
+                        style={{ width: `${material.progress}%` }}
+                      />
+                    </div>
+                    <p className="mt-3 text-xs leading-5 text-zinc-500">
+                      {material.note}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="space-y-6">
@@ -307,44 +305,44 @@ export default function Home() {
             </Link>
           }
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7">
-          <div className="grid gap-4 xl:grid-cols-3">
-            {topMatches.map((match) => {
-              const artist = getArtistBySlug(match.artistSlug);
-              const opportunity = getOpportunityBySlug(match.opportunitySlug);
+        <div className="grid gap-4 xl:grid-cols-3">
+          {topMatches.map((match) => {
+            const artist = getArtistBySlug(match.artistSlug);
+            const opportunity = getOpportunityBySlug(match.opportunitySlug);
 
-              if (!artist || !opportunity) {
-                return null;
-              }
+            if (!artist || !opportunity) {
+              return null;
+            }
 
-              return (
-                <Link
-                  key={`${match.artistSlug}-${match.opportunitySlug}`}
-                  href={`/opportunities/${opportunity.slug}`}
-                  className="block rounded-3xl border border-zinc-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="line-clamp-2 text-base font-semibold text-zinc-950">
-                        {opportunity.title}
-                      </p>
-                      <p className="mt-2 text-sm text-zinc-500">
-                        推荐给 {artist.name}
-                      </p>
-                    </div>
-                    <p className="text-3xl font-semibold text-zinc-950">
-                      {match.score}%
+            return (
+              <Link
+                key={`${match.artistSlug}-${match.opportunitySlug}`}
+                href={`/opportunities/${opportunity.slug}`}
+                className="block rounded-3xl border border-zinc-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="line-clamp-2 text-base font-semibold text-zinc-950">
+                      {opportunity.title}
+                    </p>
+                    <p className="mt-2 text-sm text-zinc-500">
+                      推荐给 {artist.name}
                     </p>
                   </div>
-                  <p className="mt-5 text-sm leading-7 text-zinc-500">
-                    {match.reasons.join(" / ")}
+                  <p className="text-3xl font-semibold text-zinc-950">
+                    {match.score}%
                   </p>
-                </Link>
-              );
-            })}
-          </div>
+                </div>
+                <p className="mt-5 text-sm leading-7 text-zinc-500">
+                  {match.reasons.join(" / ")}
+                </p>
+              </Link>
+            );
+          })}
         </div>
       </section>
+
+      <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
 
       <section className="space-y-6">
         <SectionHeading
@@ -353,34 +351,32 @@ export default function Home() {
           description="平台不是只看作品风格，而是综合作品、履历、预算、语言、时间和项目条件进行匹配。"
           icon={Target}
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-            {matchDimensions.map((dimension, index) => {
-              const Icon = matchIcons[index] ?? ClipboardCheck;
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          {matchDimensions.map((dimension, index) => {
+            const Icon = matchIcons[index] ?? ClipboardCheck;
 
-              return (
-                <details
-                  key={dimension.title}
-                  className="group rounded-3xl border border-zinc-200 bg-white p-5 transition open:border-zinc-300 open:shadow-sm"
-                >
-                  <summary className="cursor-pointer list-none">
-                    <div className="flex items-start justify-between gap-3">
-                      <span className="flex size-12 items-center justify-center rounded-2xl bg-zinc-950 text-white">
-                        <Icon className="size-5" />
-                      </span>
-                      <span className="text-xs text-zinc-400">0{index + 1}</span>
-                    </div>
-                    <h3 className="mt-6 text-2xl font-semibold tracking-tight text-zinc-950">
-                      {dimension.title}
-                    </h3>
-                  </summary>
-                  <p className="mt-5 border-t border-zinc-200 pt-5 text-sm leading-7 text-zinc-500">
-                    {dimension.text}
-                  </p>
-                </details>
-              );
-            })}
-          </div>
+            return (
+              <details
+                key={dimension.title}
+                className="group rounded-3xl border border-zinc-200 bg-white p-5 transition open:border-zinc-300 open:shadow-sm"
+              >
+                <summary className="cursor-pointer list-none">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="flex size-12 items-center justify-center rounded-2xl bg-zinc-950 text-white">
+                      <Icon className="size-5" />
+                    </span>
+                    <span className="text-xs text-zinc-400">0{index + 1}</span>
+                  </div>
+                  <h3 className="mt-6 text-2xl font-semibold tracking-tight text-zinc-950">
+                    {dimension.title}
+                  </h3>
+                </summary>
+                <p className="mt-5 border-t border-zinc-200 pt-5 text-sm leading-7 text-zinc-500">
+                  {dimension.text}
+                </p>
+              </details>
+            );
+          })}
         </div>
       </section>
 
@@ -391,33 +387,33 @@ export default function Home() {
           description="申请前先判断费用、住宿、交通、签证、保险、制作材料和公共分享要求，避免在提交后才发现不适合自己的现实条件。"
           icon={WalletCards}
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {costGroups.map((group) => (
-              <article
-                key={group.title}
-                className="rounded-3xl border border-zinc-200 bg-white p-5"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="flex size-10 items-center justify-center rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700">
-                    <Check className="size-5" />
-                  </span>
-                  <h3 className="text-lg font-semibold text-zinc-950">
-                    {group.title}
-                  </h3>
-                </div>
-                <ul className="mt-5 space-y-3 text-sm leading-6 text-zinc-600">
-                  {group.items.map((item) => (
-                    <li key={item} className="rounded-xl bg-zinc-50 px-3 py-2">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {costGroups.map((group) => (
+            <article
+              key={group.title}
+              className="rounded-3xl border border-zinc-200 bg-white p-5"
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex size-10 items-center justify-center rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700">
+                  <Check className="size-5" />
+                </span>
+                <h3 className="text-lg font-semibold text-zinc-950">
+                  {group.title}
+                </h3>
+              </div>
+              <ul className="mt-5 space-y-3 text-sm leading-6 text-zinc-600">
+                {group.items.map((item) => (
+                  <li key={item} className="rounded-xl bg-zinc-50 px-3 py-2">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </div>
       </section>
+
+      <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
 
       <section className="space-y-6">
         <SectionHeading
@@ -435,12 +431,10 @@ export default function Home() {
             </Link>
           }
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7">
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {featuredArtists.map((artist) => (
-              <ArtistCard key={artist.slug} artist={artist} />
-            ))}
-          </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {featuredArtists.map((artist) => (
+            <ArtistCard key={artist.slug} artist={artist} />
+          ))}
         </div>
       </section>
 
@@ -460,57 +454,58 @@ export default function Home() {
             </Link>
           }
         />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7">
-          <div className="grid gap-4 lg:grid-cols-2">
-            {communityPosts.map((post) => (
-              <article
-                key={post.title}
-                className="grid grid-cols-[48px_1fr_auto] gap-4 rounded-3xl border border-zinc-200 bg-white p-5"
-              >
-                <div className="relative size-12 overflow-hidden rounded-full bg-zinc-100">
-                  <Image
-                    src={post.avatar}
-                    alt={post.author}
-                    fill
-                    sizes="48px"
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-zinc-950">{post.title}</p>
-                  <p className="mt-2 text-sm text-zinc-400">
-                    {post.author} · {post.time}
-                  </p>
-                </div>
-                <p className="flex items-center gap-1 text-sm text-zinc-500">
-                  <MessageCircle className="size-4" />
-                  {post.comments}
+        <div className="grid gap-4 lg:grid-cols-2">
+          {communityPosts.map((post) => (
+            <article
+              key={post.title}
+              className="grid grid-cols-[48px_1fr_auto] gap-4 rounded-3xl border border-zinc-200 bg-white p-5"
+            >
+              <div className="relative size-12 overflow-hidden rounded-full bg-zinc-100">
+                <Image
+                  src={post.avatar}
+                  alt={post.author}
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-zinc-950">{post.title}</p>
+                <p className="mt-2 text-sm text-zinc-400">
+                  {post.author} · {post.time}
                 </p>
-              </article>
-            ))}
-          </div>
+              </div>
+              <p className="flex items-center gap-1 text-sm text-zinc-500">
+                <MessageCircle className="size-4" />
+                {post.comments}
+              </p>
+            </article>
+          ))}
         </div>
       </section>
 
-      <section className="space-y-6">
-        <SectionHeading
-          eyebrow="Private beta"
-          title="加入内测"
-          description="留下角色与方向，优先体验驻留匹配、材料提醒和申请进度追踪。我们会优先邀请正在准备驻留申请的青年艺术家与驻留项目方。"
-          icon={Send}
-        />
-        <div className="rounded-[32px] border border-zinc-200/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 sm:p-7 lg:p-9">
-          <div className="grid gap-8 xl:grid-cols-[minmax(0,0.85fr)_minmax(360px,1fr)] xl:items-start">
-            <div className="rounded-3xl border border-zinc-200 bg-[#fbfaf6] p-6">
-              <p className="text-sm font-medium text-zinc-500">适合加入的人</p>
-              <div className="mt-5 grid gap-3 text-sm text-zinc-600">
-                <p className="rounded-2xl bg-white px-4 py-3">正在准备第一次驻留申请的青年艺术家</p>
-                <p className="rounded-2xl bg-white px-4 py-3">需要中文解释、成本判断与材料提醒的艺术学生</p>
-                <p className="rounded-2xl bg-white px-4 py-3">希望统一收集作品集和申请材料的驻留项目方</p>
-              </div>
+      <section className="!mt-32 rounded-[32px] bg-zinc-950 p-6 text-white sm:p-8 lg:!mt-40 lg:p-10">
+        <div className="max-w-4xl">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-300">
+            Private beta
+          </p>
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            加入内测
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-300">
+            留下角色与方向，优先体验驻留匹配、材料提醒和申请进度追踪。我们会优先邀请正在准备驻留申请的青年艺术家与驻留项目方。
+          </p>
+        </div>
+        <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,0.85fr)_minmax(360px,1fr)] xl:items-start">
+          <div className="rounded-3xl border border-white/10 bg-white/10 p-6">
+            <p className="text-sm font-medium text-zinc-300">适合加入的人</p>
+            <div className="mt-5 grid gap-3 text-sm text-zinc-200">
+              <p className="rounded-2xl bg-white/10 px-4 py-3">正在准备第一次驻留申请的青年艺术家</p>
+              <p className="rounded-2xl bg-white/10 px-4 py-3">需要中文解释、成本判断与材料提醒的艺术学生</p>
+              <p className="rounded-2xl bg-white/10 px-4 py-3">希望统一收集作品集和申请材料的驻留项目方</p>
             </div>
-            <WaitlistForm compact />
           </div>
+          <WaitlistForm />
         </div>
       </section>
     </div>

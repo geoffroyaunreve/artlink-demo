@@ -93,7 +93,7 @@ export function OpportunityCard({
           {opportunity.riskTags.slice(0, compact ? 1 : 3).map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs text-zinc-500"
+              className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs text-amber-700"
             >
               {tag}
             </span>
