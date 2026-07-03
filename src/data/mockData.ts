@@ -150,9 +150,9 @@ export const heroImage =
   "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=80";
 
 export const platformStats = [
-  { value: "86", label: "个精选驻留项目" },
-  { value: "24", label: "家认证机构" },
-  { value: "320", label: "位青年艺术家" },
+  { value: "86+", label: "个精选驻留项目" },
+  { value: "24+", label: "家认证机构" },
+  { value: "320+", label: "位青年艺术家" },
   { value: "92%", label: "项目标注费用与住宿信息" },
 ];
 

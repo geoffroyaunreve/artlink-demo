@@ -95,7 +95,7 @@ export default function ApplicationsPage() {
 
               <Link
                 href={`/opportunities/${opportunity.slug}`}
-                className="mt-5 inline-flex h-10 items-center gap-2 rounded-lg bg-zinc-950 px-4 text-sm font-medium text-white"
+                className="mt-5 inline-flex h-10 items-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white"
               >
                 查看驻留详情
                 <ArrowRight className="size-4" />

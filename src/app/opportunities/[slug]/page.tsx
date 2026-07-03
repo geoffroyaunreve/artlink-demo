@@ -306,7 +306,7 @@ export default async function OpportunityDetailPage({
           </div>
           <Link
             href="/artists"
-            className="text-sm text-zinc-500 hover:text-zinc-950"
+            className="inline-flex h-10 items-center rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
           >
             查看作品集主页
           </Link>

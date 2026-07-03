@@ -46,14 +46,14 @@ export default function ArtistEntryPage() {
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/opportunities"
-              className="inline-flex h-11 items-center gap-2 rounded-lg bg-white px-5 text-sm font-medium text-zinc-950"
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-white/15 bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
             >
               浏览驻留机会
               <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/materials"
-              className="inline-flex h-11 items-center rounded-lg border border-white/20 px-5 text-sm font-medium text-white"
+              className="inline-flex h-11 items-center rounded-full border border-white/15 bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
             >
               准备申请材料
             </Link>

@@ -9,7 +9,7 @@ type ArtistCardProps = {
 
 export function ArtistCard({ artist }: ArtistCardProps) {
   return (
-    <article className="rounded-xl border border-zinc-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm">
+    <article className="rounded-3xl border border-zinc-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm">
       <div className="flex items-start gap-4">
         <Link href={`/artists/${artist.slug}`} className="relative block size-16 shrink-0 overflow-hidden rounded-full bg-zinc-100">
           <Image
@@ -57,7 +57,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
 
       <Link
         href={`/artists/${artist.slug}`}
-        className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-100 text-sm font-medium text-zinc-800 transition hover:bg-zinc-200"
+        className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
       >
         查看作品集
         <ArrowUpRight className="size-4" />
