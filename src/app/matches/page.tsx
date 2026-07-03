@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { getArtistBySlug, getOpportunityBySlug, projectMatches } from "@/data/mockData";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 export const metadata = {
   title: "我的匹配 | ART LINK",
@@ -33,10 +34,10 @@ export default function MatchesPage() {
           return (
             <article
               key={`${match.artistSlug}-${match.opportunitySlug}`}
-              className="rounded-2xl border border-zinc-200 bg-white p-5"
+              className="relative rounded-2xl border border-zinc-200 bg-white p-5"
             >
               <div className="flex items-start justify-between gap-4">
-                <div>
+                <div className="pr-12">
                   <p className="text-sm text-zinc-500">
                     推荐给 {artist.name} · {artist.discipline}
                   </p>
@@ -45,11 +46,16 @@ export default function MatchesPage() {
                     {opportunity.location} · {opportunity.type} · {opportunity.costLevel}
                   </p>
                 </div>
-                <div className="rounded-xl bg-zinc-950 px-4 py-3 text-center text-white">
+                <div className="mr-12 rounded-xl bg-zinc-950 px-4 py-3 text-center text-white">
                   <p className="text-3xl font-semibold">{match.score}%</p>
                   <p className="text-xs text-zinc-300">匹配度</p>
                 </div>
               </div>
+              <FavoriteButton
+                slug={opportunity.slug}
+                title={opportunity.title}
+                className="absolute right-5 top-5"
+              />
 
               <div className="mt-5 grid gap-3 md:grid-cols-2">
                 {match.reasons.map((reason) => (
