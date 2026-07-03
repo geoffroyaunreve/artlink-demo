@@ -177,7 +177,7 @@ export default async function ArtistDetailPage({ params }: ArtistDetailPageProps
           </div>
           <Link
             href="/opportunities"
-            className="text-sm text-zinc-500 hover:text-zinc-950"
+            className="inline-flex h-10 items-center rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
           >
             查看全部
           </Link>

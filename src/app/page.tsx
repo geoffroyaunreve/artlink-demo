@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   ArrowRight,
   Brush,
   Check,
   ClipboardCheck,
-  Compass,
   FileText,
   GraduationCap,
   MessageCircle,
@@ -29,7 +28,22 @@ import {
 } from "@/data/mockData";
 import { ArtistCard } from "@/components/ArtistCard";
 import { OpportunityCard } from "@/components/OpportunityCard";
+import { ScrollReveal } from "@/components/ScrollReveal";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { WaitlistForm } from "@/components/WaitlistForm";
+
+const primaryPillButton =
+  "inline-flex h-10 items-center justify-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800";
+
+const heroPillButton =
+  "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-zinc-950 px-6 text-sm font-medium text-white transition hover:bg-zinc-800";
+
+const secondaryHeroPillButton =
+  "inline-flex h-11 items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white/90 px-6 text-sm font-medium text-zinc-950 transition hover:border-zinc-300 hover:bg-white";
+
+function revealStyle(step: number): CSSProperties {
+  return { "--reveal-step": step } as CSSProperties;
+}
 
 type SectionHeadingProps = {
   eyebrow: string;
@@ -58,7 +72,7 @@ function SectionHeading({
     return (
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-5xl">
-          <p className="inline-flex items-center gap-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700">
+          <p className="inline-flex items-center gap-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700 [text-shadow:0_0_18px_rgba(4,120,87,0.5)]">
             <span
               className="h-0 w-0 border-y-[6px] border-l-[10px] border-y-transparent border-l-emerald-600"
               aria-hidden="true"
@@ -67,11 +81,11 @@ function SectionHeading({
           </p>
           <div className="mt-8 flex items-stretch gap-5">
             <span
-              className="relative w-6 shrink-0 bg-zinc-950 after:absolute after:inset-y-0 after:right-0 after:w-1.5 after:bg-white sm:w-8 sm:after:w-2"
+              className="relative w-3 shrink-0 bg-zinc-950 after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-white sm:w-4 sm:after:w-1"
               aria-hidden="true"
             />
             <div>
-              <h2 className="text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">
+              <h2 className="text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
                 {title}
               </h2>
               {description ? (
@@ -90,7 +104,7 @@ function SectionHeading({
   return (
     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
       <div className="max-w-4xl">
-        <p className="mb-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700">
+        <p className="mb-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700 [text-shadow:0_0_18px_rgba(4,120,87,0.5)]">
           {eyebrow}
         </p>
         <div className="flex items-start gap-4">
@@ -103,7 +117,7 @@ function SectionHeading({
             <h2
               className={
                 prominent
-                  ? "text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl"
+                  ? "text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl"
                   : compact
                     ? "text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl"
                   : "text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl"
@@ -132,15 +146,6 @@ export default function Home() {
   const activeOpportunity = activeApplication
     ? getOpportunityBySlug(activeApplication.opportunitySlug)
     : null;
-  const applicationFlow = [
-    "发现驻留",
-    "查看匹配理由",
-    "加入申请清单",
-    "准备材料",
-    "提交申请",
-    "跟进状态",
-    "复盘结果",
-  ];
   const matchIcons = [Brush, FileText, GraduationCap, WalletCards, ClipboardCheck];
   const costGroups = [
     {
@@ -163,6 +168,7 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-[1500px] space-y-20 lg:space-y-24">
+      <ScrollReveal />
       <section className="relative min-h-[520px] overflow-hidden rounded-[32px]">
         <Image
           src={heroImage}
@@ -179,8 +185,8 @@ export default function Home() {
             <p className="mb-6 inline-flex rounded-full border border-zinc-200 bg-white/80 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">
               Residency Application Assistant
             </p>
-            <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight text-zinc-950 sm:text-6xl">
-              为青年艺术家匹配可信驻留机会
+            <h1 className="max-w-5xl text-5xl font-semibold leading-[1.08] tracking-tight text-zinc-950 [text-shadow:0_10px_24px_rgba(24,24,27,0.18)] sm:text-6xl lg:text-7xl">
+              为青年艺术家匹配可信驻留机会。
             </h1>
             <p className="mt-6 max-w-4xl text-base leading-8 text-zinc-600">
               聚合并审核国内外艺术驻留、研究型项目与创作支持计划，结合艺术家的作品集、媒介、创作阶段、预算、语言能力和申请条件，推荐真正适合的驻留项目，并帮助完成申请管理。
@@ -188,20 +194,20 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/opportunities"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-zinc-950 px-6 text-sm font-medium text-white transition hover:bg-zinc-800"
+                className={heroPillButton}
               >
                 浏览驻留机会
                 <ArrowRight className="size-4" />
               </Link>
               <Link
                 href="/matches"
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-zinc-200 bg-white/80 px-6 text-sm font-medium text-zinc-950 transition hover:border-zinc-300 hover:bg-white"
+                className={secondaryHeroPillButton}
               >
                 开始匹配
               </Link>
               <Link
                 href="/institution-entry"
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-zinc-200 bg-white/80 px-6 text-sm font-medium text-zinc-950 transition hover:border-zinc-300 hover:bg-white"
+                className={secondaryHeroPillButton}
               >
                 发布驻留项目
               </Link>
@@ -209,12 +215,13 @@ export default function Home() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-            {platformStats.map((stat) => (
+            {platformStats.map((stat, index) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-white/80 bg-white/75 p-5 shadow-sm shadow-zinc-200/50 backdrop-blur"
+                className="hero-stat-card rounded-2xl border border-white/80 bg-white/75 p-5 shadow-[0_14px_32px_rgba(24,24,27,0.08)] backdrop-blur"
+                style={revealStyle(index)}
               >
-                <p className="text-4xl font-semibold tracking-tight text-zinc-950">
+                <p className="text-4xl font-medium leading-none tracking-normal text-zinc-950 sm:text-5xl">
                   {stat.value}
                 </p>
                 <p className="mt-2 text-sm text-zinc-600">{stat.label}</p>
@@ -224,37 +231,56 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-8 lg:space-y-10">
+      <section
+        className="space-y-8 lg:space-y-10"
+        data-scroll-reveal=""
+        style={revealStyle(0)}
+      >
         <SectionHeading
           eyebrow="Curated residencies"
           title="精选驻留机会"
           description="每个项目都标注成本、住宿、语言和申请资格，先看清条件，再决定是否投入申请时间。"
-          icon={Compass}
           prominent
+          accentBar
           action={
             <Link
               href="/opportunities"
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950"
+              className={primaryPillButton}
             >
               查看更多
               <ArrowRight className="size-4" />
             </Link>
           }
         />
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {featuredResidencies.map((opportunity) => (
-            <OpportunityCard
-              key={opportunity.slug}
-              opportunity={opportunity}
-              compact
-            />
-          ))}
+        <div
+          id="featured-residency-rail"
+          className="-mx-4 snap-x snap-mandatory overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 xl:-mx-8 xl:px-8 [&::-webkit-scrollbar]:hidden"
+        >
+          <div className="flex min-w-max gap-5">
+            {featuredResidencies.map((opportunity) => (
+              <div
+                key={opportunity.slug}
+                className="h-[560px] w-[76vw] max-w-[300px] shrink-0 snap-start sm:h-[545px] sm:w-[280px] lg:h-[555px] lg:w-[300px]"
+              >
+                <OpportunityCard
+                  opportunity={opportunity}
+                  compact
+                  className="h-full"
+                />
+              </div>
+            ))}
+          </div>
         </div>
+        <ScrollProgress targetId="featured-residency-rail" />
       </section>
 
       <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
 
-      <section className="space-y-12 lg:space-y-14">
+      <section
+        className="space-y-12 lg:space-y-14"
+        data-scroll-reveal=""
+        style={revealStyle(1)}
+      >
         <SectionHeading
           eyebrow="Application workflow"
           title="从发现驻留，到完成申请。"
@@ -264,26 +290,13 @@ export default function Home() {
           action={
             <Link
               href="/applications"
-              className="inline-flex h-10 items-center gap-2 rounded-full bg-zinc-950 px-4 text-sm font-medium text-white transition hover:bg-zinc-800"
+              className={primaryPillButton}
             >
               查看申请清单
               <ArrowRight className="size-4" />
             </Link>
           }
         />
-        <div className="grid gap-3 md:grid-cols-7">
-          {applicationFlow.map((step, index) => (
-            <div
-              key={step}
-              className="rounded-2xl border border-zinc-200 bg-white p-4"
-            >
-              <span className="mb-4 block text-xs font-medium text-zinc-400">
-                0{index + 1}
-              </span>
-              <p className="text-sm font-semibold text-zinc-900">{step}</p>
-            </div>
-          ))}
-        </div>
 
         {activeOpportunity ? (
           <div className="rounded-3xl border border-zinc-200 bg-white p-5 sm:p-6">
@@ -351,7 +364,11 @@ export default function Home() {
         ) : null}
       </section>
 
-      <section className="space-y-6 !mt-6 lg:!mt-8">
+      <section
+        className="space-y-6 !mt-6 lg:!mt-8"
+        data-scroll-reveal=""
+        style={revealStyle(2)}
+      >
         <SectionHeading
           eyebrow="Personal matches"
           title="我的匹配"
@@ -361,7 +378,7 @@ export default function Home() {
           action={
             <Link
               href="/matches"
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950"
+              className={primaryPillButton}
             >
               查看全部
               <ArrowRight className="size-4" />
@@ -407,7 +424,11 @@ export default function Home() {
 
       <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
 
-      <section className="space-y-12 lg:space-y-14">
+      <section
+        className="space-y-12 lg:space-y-14"
+        data-scroll-reveal=""
+        style={revealStyle(3)}
+      >
         <SectionHeading
           eyebrow="Matching logic"
           title="我们不是简单推荐驻留，而是判断它是否真的适合你。"
@@ -444,7 +465,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6 !mt-6 lg:!mt-8">
+      <section
+        className="space-y-6 !mt-6 lg:!mt-8"
+        data-scroll-reveal=""
+        style={revealStyle(4)}
+      >
         <SectionHeading
           eyebrow="Cost transparency"
           title="看清驻留背后的真实成本"
@@ -480,7 +505,11 @@ export default function Home() {
 
       <div className="h-px w-full bg-zinc-300/80" aria-hidden="true" />
 
-      <section className="space-y-6">
+      <section
+        className="space-y-6"
+        data-scroll-reveal=""
+        style={revealStyle(5)}
+      >
         <SectionHeading
           eyebrow="Portfolio home"
           title="作品集主页"
@@ -489,7 +518,7 @@ export default function Home() {
           action={
             <Link
               href="/artists"
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950"
+              className={primaryPillButton}
             >
               查看更多
               <ArrowRight className="size-4" />
@@ -503,7 +532,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="community" className="space-y-6">
+      <section
+        id="community"
+        className="space-y-6"
+        data-scroll-reveal=""
+        style={revealStyle(6)}
+      >
         <SectionHeading
           eyebrow="Residency guide"
           title="驻留指南讨论"
@@ -512,7 +546,7 @@ export default function Home() {
           action={
             <Link
               href="/guide"
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950"
+              className={primaryPillButton}
             >
               查看更多
               <ArrowRight className="size-4" />
@@ -549,7 +583,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="!mt-32 rounded-[32px] bg-zinc-950 p-6 text-white sm:p-8 lg:!mt-40 lg:p-10">
+      <section
+        className="!mt-32 rounded-[32px] bg-zinc-950 p-6 text-white sm:p-8 lg:!mt-40 lg:p-10"
+      >
         <div className="max-w-4xl">
           <p className="mb-3 text-sm font-medium uppercase tracking-[0.16em] text-emerald-300">
             Private beta

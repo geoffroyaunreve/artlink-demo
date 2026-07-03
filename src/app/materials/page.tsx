@@ -67,7 +67,7 @@ export default function MaterialsPage() {
 
       <Link
         href="/applications"
-        className="inline-flex h-11 items-center gap-2 rounded-lg bg-zinc-950 px-5 text-sm font-medium text-white"
+        className="inline-flex h-11 items-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white"
       >
         回到申请清单
         <ArrowRight className="size-4" />

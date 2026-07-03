@@ -34,7 +34,7 @@ export function ActionButton({
       aria-live="polite"
       onClick={() => setDone(true)}
       className={cn(
-        "inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition",
+        "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition",
         variant === "dark"
           ? "bg-zinc-950 text-white hover:bg-zinc-800"
           : "border border-zinc-200 bg-white text-zinc-950 hover:border-zinc-300 hover:bg-zinc-50",

@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { CSSProperties, ReactNode } from "react";
 import {
   Bell,
   Building2,
   ChevronRight,
+  ClipboardList,
   Home,
-  Mail,
   MessageCircle,
-  Menu,
   Search,
   Sparkles,
   WandSparkles,
@@ -24,10 +24,10 @@ type NavItem = {
   icon: LucideIcon;
 };
 
-const topNav = [
-  { label: "首页", href: "/" },
-  { label: "驻留机会", href: "/opportunities" },
-  { label: "申请清单", href: "/applications" },
+const topNav: NavItem[] = [
+  { label: "首页", href: "/", icon: Home },
+  { label: "驻留机会", href: "/opportunities", icon: Search },
+  { label: "申请清单", href: "/applications", icon: ClipboardList },
 ];
 
 const extraNav: NavItem[] = [
@@ -37,6 +37,8 @@ const extraNav: NavItem[] = [
   { label: "驻留指南", href: "/guide", icon: MessageCircle },
   { label: "机构发布", href: "/institution-entry", icon: Building2 },
 ];
+
+const menuNav: NavItem[] = [...topNav, ...extraNav];
 
 function isActive(pathname: string, href: string) {
   if (href === "/") {
@@ -59,7 +61,7 @@ function Logo() {
   );
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -70,7 +72,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 xl:px-8">
             <Logo />
 
-            <nav className="hidden items-center gap-3 text-sm font-medium md:flex">
+            <nav className="hidden items-center gap-3 text-sm font-medium xl:flex">
               {topNav.map((item) => (
                 <Link
                   key={item.label}
@@ -87,16 +89,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
 
-            <div className="ml-auto hidden h-10 w-full max-w-[420px] items-center rounded-full border border-white/10 bg-white/10 px-4 backdrop-blur-xl lg:flex">
+            <div className="ml-auto hidden h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 px-0 backdrop-blur-xl transition-all md:flex xl:w-64 xl:justify-start xl:px-4">
               <Search className="size-4 text-zinc-500" />
               <input
-                className="h-full flex-1 bg-transparent px-3 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
+                className="hidden h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 xl:block"
                 placeholder="搜索驻留项目、国家、机构、媒介..."
               />
-              <Search className="size-4 text-zinc-500" />
             </div>
 
-            <div className="ml-auto flex items-center gap-2 lg:ml-0">
+            <div className="ml-auto flex items-center gap-2 md:ml-0">
               <button
                 type="button"
                 title="通知"
@@ -104,55 +105,65 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               >
                 <Bell className="size-5" />
               </button>
-              <button
-                type="button"
-                title="消息"
-                className="hidden size-10 items-center justify-center rounded-full border border-transparent text-zinc-400 transition hover:border-zinc-800 hover:bg-zinc-900 hover:text-white sm:flex"
-              >
-                <Mail className="size-5" />
-              </button>
               <Link
                 href="/artist-entry"
-                className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/10 py-1 pl-1 pr-3 text-sm font-medium text-zinc-200 backdrop-blur-xl sm:flex"
+                className="hidden size-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-medium text-zinc-200 backdrop-blur-xl sm:flex"
+                aria-label="个人账户"
               >
                 <span className="flex size-8 items-center justify-center rounded-full bg-white text-zinc-950">
                   A
                 </span>
-                <span className="hidden sm:inline">Aria</span>
               </Link>
               <button
                 type="button"
                 onClick={() => setMenuOpen((open) => !open)}
-                className="inline-flex size-10 items-center justify-center rounded-full border border-transparent text-white transition hover:border-zinc-800 hover:bg-zinc-900"
+                className="group inline-flex size-10 items-center justify-center rounded-full border border-transparent text-white transition hover:border-zinc-800 hover:bg-zinc-900"
                 aria-expanded={menuOpen}
-                aria-label="展开更多导航"
+                aria-label={menuOpen ? "收起导航菜单" : "展开更多导航"}
               >
-                <Menu className="size-5" />
+                <span className="relative flex size-5 items-center justify-center" aria-hidden="true">
+                  <span
+                    className={cn(
+                      "absolute h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ease-out",
+                      menuOpen ? "translate-y-0 rotate-45" : "-translate-y-1.5 rotate-0",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "absolute h-0.5 w-5 rounded-full bg-current transition-all duration-200 ease-out",
+                      menuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "absolute h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ease-out",
+                      menuOpen ? "translate-y-0 -rotate-45" : "translate-y-1.5 rotate-0",
+                    )}
+                  />
+                </span>
               </button>
             </div>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto px-4 pb-3 sm:px-6 md:hidden">
-            {topNav.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  "whitespace-nowrap rounded-full px-4 py-2 text-sm",
-                  isActive(pathname, item.href)
-                    ? "bg-white text-zinc-950"
-                    : "border border-zinc-800 bg-zinc-950 text-zinc-400",
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          {menuOpen ? (
-            <div className="border-t border-white/10 bg-black/75 px-4 py-5 shadow-lg shadow-black/20 backdrop-blur-2xl sm:px-6 xl:px-8">
+          <div
+            data-menu-panel="true"
+            className={cn(
+              "frosted-menu-panel absolute left-0 right-0 top-full overflow-hidden border-t border-white/10 px-4 shadow-[0_24px_70px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300 ease-out [backdrop-filter:blur(80px)_saturate(150%)] sm:px-6 xl:px-8",
+              menuOpen
+                ? "pointer-events-auto max-h-[80vh] translate-y-0 opacity-100"
+                : "pointer-events-none max-h-0 -translate-y-3 opacity-0",
+            )}
+            style={{
+              backdropFilter: "blur(80px) saturate(150%)",
+              WebkitBackdropFilter: "blur(80px) saturate(150%)",
+              background: "rgba(0, 0, 0, 0.7)",
+            }}
+            aria-hidden={!menuOpen}
+          >
+            <div className="relative py-5">
               <div className="mx-auto flex max-w-3xl flex-col">
-                {extraNav.map((item) => {
+                {menuNav.map((item, index) => {
+                  const Icon = item.icon;
                   const active = isActive(pathname, item.href);
 
                   return (
@@ -160,21 +171,27 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       key={item.label}
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
+                      tabIndex={menuOpen ? 0 : -1}
                       className={cn(
-                        "flex min-h-14 items-center justify-between border-b border-zinc-900 px-1 text-lg font-medium transition last:border-b-0 sm:text-xl",
+                        "flex min-h-14 items-center justify-between px-1 text-lg font-medium transition sm:text-xl",
+                        menuOpen ? "menu-panel-item" : "opacity-0",
                         active
                           ? "text-white"
                           : "text-zinc-400 hover:text-white",
                       )}
+                      style={{ "--menu-index": index } as CSSProperties}
                     >
-                      <span>{item.label}</span>
+                      <span className="flex items-center gap-3">
+                        <Icon className="size-5" />
+                        {item.label}
+                      </span>
                       <ChevronRight className="size-5" />
                     </Link>
                   );
                 })}
               </div>
             </div>
-          ) : null}
+          </div>
         </header>
 
         <main className="px-4 py-8 sm:px-6 xl:px-8">{children}</main>
