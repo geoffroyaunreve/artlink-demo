@@ -98,17 +98,18 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
 
             <div className="ml-auto flex items-center gap-2 md:ml-0">
-              <button
-                type="button"
+              <Link
+                href="/notifications"
                 title="通知"
-                className="hidden size-10 items-center justify-center rounded-full border border-transparent text-zinc-400 transition hover:border-zinc-800 hover:bg-zinc-900 hover:text-white sm:flex"
+                className="flex size-10 items-center justify-center rounded-full border border-transparent text-zinc-400 transition hover:border-zinc-800 hover:bg-zinc-900 hover:text-white"
+                aria-label="消息通知"
               >
                 <Bell className="size-5" />
-              </button>
+              </Link>
               <Link
-                href="/artist-entry"
-                className="hidden size-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-medium text-zinc-200 backdrop-blur-xl sm:flex"
-                aria-label="个人账户"
+                href="/profile"
+                className="flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-medium text-zinc-200 backdrop-blur-xl"
+                aria-label="个人主页"
               >
                 <span className="flex size-8 items-center justify-center rounded-full bg-white text-zinc-950">
                   A

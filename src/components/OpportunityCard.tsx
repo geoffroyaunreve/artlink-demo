@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BedDouble, CalendarDays, Globe2, MapPin, WalletCards } from "lucide-react";
 import type { Opportunity } from "@/data/mockData";
 import { ActionButton } from "@/components/ActionButton";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { cn } from "@/lib/utils";
 
@@ -32,8 +33,8 @@ export function OpportunityCard({
         className,
       )}
     >
-      <Link href={`/opportunities/${opportunity.slug}`} className="block">
-        <div className={cn("relative bg-zinc-100", compact ? "h-28" : "h-40")}>
+      <div className={cn("relative bg-zinc-100", compact ? "h-28" : "h-40")}>
+        <Link href={`/opportunities/${opportunity.slug}`} className="block h-full">
           <Image
             src={opportunity.image}
             alt={opportunity.title}
@@ -44,8 +45,13 @@ export function OpportunityCard({
           <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-zinc-950">
             匹配度 {opportunity.matchScore}%
           </div>
-        </div>
-      </Link>
+        </Link>
+        <FavoriteButton
+          slug={opportunity.slug}
+          title={opportunity.title}
+          className="absolute right-3 top-3 z-10"
+        />
+      </div>
 
       <div
         className={cn(

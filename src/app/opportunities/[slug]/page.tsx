@@ -18,6 +18,7 @@ import {
 } from "@/data/mockData";
 import { ActionButton } from "@/components/ActionButton";
 import { ArtistCard } from "@/components/ArtistCard";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { StatusBadge } from "@/components/StatusBadge";
 
 type OpportunityDetailPageProps = {
@@ -86,6 +87,11 @@ export default async function OpportunityDetailPage({
             className="object-cover grayscale-[10%]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+          <FavoriteButton
+            slug={opportunity.slug}
+            title={opportunity.title}
+            className="absolute right-4 top-4 z-10 sm:right-6 sm:top-6"
+          />
           <div className="absolute bottom-0 left-0 right-0 p-6 text-white sm:p-8">
             <div className="mb-4 flex flex-wrap gap-2">
               <StatusBadge
