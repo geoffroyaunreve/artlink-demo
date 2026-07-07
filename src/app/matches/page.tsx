@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { getArtistBySlug, getOpportunityBySlug, projectMatches } from "@/data/mockData";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { PortfolioMatchFlow } from "@/components/PortfolioMatchFlow";
 
 export const metadata = {
   title: "我的匹配 | ART LINK",
@@ -22,7 +23,9 @@ export default function MatchesPage() {
         </p>
       </section>
 
-      <section className="grid gap-5 xl:grid-cols-2">
+      <PortfolioMatchFlow />
+
+      <section id="match-recommendations" className="grid scroll-mt-28 gap-5 xl:grid-cols-2">
         {projectMatches.map((match) => {
           const artist = getArtistBySlug(match.artistSlug);
           const opportunity = getOpportunityBySlug(match.opportunitySlug);

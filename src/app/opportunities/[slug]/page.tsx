@@ -3,12 +3,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
+  Banknote,
+  BedDouble,
+  Building2,
   CalendarDays,
   CheckCircle2,
+  ClipboardList,
+  FileCheck2,
   Globe2,
+  Hammer,
   MapPin,
+  Plane,
   ShieldCheck,
+  UsersRound,
   WalletCards,
+  type LucideIcon,
 } from "lucide-react";
 import {
   getArtistBySlug,
@@ -53,17 +62,45 @@ export default async function OpportunityDetailPage({
     .map((artistSlug) => getArtistBySlug(artistSlug))
     .filter(Boolean);
 
-  const costRows = [
-    ["申请费用", opportunity.costs.applicationFee],
-    ["项目费用", opportunity.costs.programFee],
-    ["住宿情况", opportunity.costs.accommodation],
-    ["工作室情况", opportunity.costs.studio],
-    ["生活补贴", opportunity.costs.stipend],
-    ["交通支持", opportunity.costs.travel],
-    ["签证提示", opportunity.costs.visa],
-    ["保险成本", opportunity.costs.insurance],
-    ["制作费用", opportunity.costs.production],
-    ["公共要求", opportunity.costs.publicRequirement],
+  const costSections: Array<{
+    title: string;
+    icon: LucideIcon;
+    items: Array<{ label: string; value: string; icon: LucideIcon }>;
+  }> = [
+    {
+      title: "直接费用",
+      icon: WalletCards,
+      items: [
+        { label: "申请费用", value: opportunity.costs.applicationFee, icon: FileCheck2 },
+        { label: "项目费用", value: opportunity.costs.programFee, icon: Banknote },
+      ],
+    },
+    {
+      title: "生活与空间支持",
+      icon: BedDouble,
+      items: [
+        { label: "住宿情况", value: opportunity.costs.accommodation, icon: BedDouble },
+        { label: "工作室情况", value: opportunity.costs.studio, icon: Building2 },
+        { label: "生活补贴", value: opportunity.costs.stipend, icon: Banknote },
+      ],
+    },
+    {
+      title: "出行与行政成本",
+      icon: Plane,
+      items: [
+        { label: "交通支持", value: opportunity.costs.travel, icon: Plane },
+        { label: "签证提示", value: opportunity.costs.visa, icon: ClipboardList },
+        { label: "保险成本", value: opportunity.costs.insurance, icon: ShieldCheck },
+      ],
+    },
+    {
+      title: "制作与公开义务",
+      icon: Hammer,
+      items: [
+        { label: "制作费用", value: opportunity.costs.production, icon: Hammer },
+        { label: "公共要求", value: opportunity.costs.publicRequirement, icon: UsersRound },
+      ],
+    },
   ];
 
   return (
@@ -117,25 +154,25 @@ export default async function OpportunityDetailPage({
 
         <div className="grid gap-8 p-6 lg:grid-cols-[minmax(0,1fr)_360px] sm:p-8">
           <div className="space-y-8">
-            <section className="grid gap-4 md:grid-cols-4">
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+            <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
                 <MapPin className="size-5 text-zinc-500" />
                 <p className="mt-3 text-sm text-zinc-500">国家 / 城市</p>
                 <p className="mt-1 font-semibold">{opportunity.location}</p>
               </div>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
                 <CalendarDays className="size-5 text-zinc-500" />
                 <p className="mt-3 text-sm text-zinc-500">周期 / 截止</p>
                 <p className="mt-1 font-semibold">
                   {opportunity.duration} · {opportunity.deadline}
                 </p>
               </div>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
                 <WalletCards className="size-5 text-zinc-500" />
                 <p className="mt-3 text-sm text-zinc-500">成本等级</p>
                 <p className="mt-1 font-semibold">{opportunity.costLevel}</p>
               </div>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
                 <Globe2 className="size-5 text-zinc-500" />
                 <p className="mt-3 text-sm text-zinc-500">语言要求</p>
                 <p className="mt-1 font-semibold">{opportunity.languages.join(" / ")}</p>
@@ -166,18 +203,49 @@ export default async function OpportunityDetailPage({
 
             <section>
               <h2 className="text-xl font-semibold">真实成本</h2>
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
-                {costRows.map(([label, value]) => (
+              <div className="mt-4 grid gap-4">
+                {costSections.map((section) => {
+                  const SectionIcon = section.icon;
+
+                  return (
                   <div
-                    key={label}
-                    className="rounded-xl border border-zinc-200 bg-zinc-50 p-4"
+                    key={section.title}
+                    className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 shadow-[0_10px_22px_rgba(0,0,0,0.04)]"
                   >
-                    <p className="text-sm text-zinc-500">{label}</p>
-                    <p className="mt-2 text-sm font-medium leading-6 text-zinc-800">
-                      {value}
-                    </p>
+                    <div className="flex gap-3">
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-white">
+                        <SectionIcon className="size-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-base font-semibold text-zinc-950">
+                          {section.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 md:grid-cols-2">
+                      {section.items.map((item) => {
+                        const ItemIcon = item.icon;
+
+                        return (
+                          <div
+                            key={item.label}
+                            className="flex gap-3 rounded-2xl border border-zinc-200 bg-white p-4"
+                          >
+                            <ItemIcon className="mt-0.5 size-4 shrink-0 text-zinc-500" />
+                            <div>
+                              <p className="text-sm text-zinc-500">{item.label}</p>
+                              <p className="mt-2 text-sm font-medium leading-6 text-zinc-800">
+                                {item.value}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
 
