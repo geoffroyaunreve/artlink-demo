@@ -189,28 +189,30 @@ export default function Home() {
               为青年艺术家匹配可信驻留机会。
             </h1>
             <p className="mt-6 max-w-4xl text-base leading-8 text-zinc-600">
-              聚合并审核国内外艺术驻留、研究型项目与创作支持计划，结合艺术家的作品集、媒介、创作阶段、预算、语言能力和申请条件，推荐真正适合的驻留项目，并帮助完成申请管理。
+              通过机器整理与人工复核双重机制，校对国内外驻留项目的费用、住宿、语言、资格与截止日期；再结合艺术家的作品集媒介、创作阶段、预算和申请条件，给出更精准、个性化的驻留匹配建议。
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/opportunities"
-                className={heroPillButton}
+                className={`${heroPillButton} w-full sm:w-auto`}
               >
                 浏览驻留机会
                 <ArrowRight className="size-4" />
               </Link>
-              <Link
-                href="/matches"
-                className={secondaryHeroPillButton}
-              >
-                开始匹配
-              </Link>
-              <Link
-                href="/institution-entry"
-                className={secondaryHeroPillButton}
-              >
-                发布驻留项目
-              </Link>
+              <div className="grid grid-cols-2 gap-3 sm:contents">
+                <Link
+                  href="/matches"
+                  className={`${secondaryHeroPillButton} px-4 sm:px-6`}
+                >
+                  开始匹配
+                </Link>
+                <Link
+                  href="/institution-entry"
+                  className={`${secondaryHeroPillButton} px-4 sm:px-6`}
+                >
+                  发布驻留项目
+                </Link>
+              </div>
             </div>
           </div>
 
