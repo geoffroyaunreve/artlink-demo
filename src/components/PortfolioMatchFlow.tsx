@@ -10,7 +10,6 @@ import {
   Sparkles,
   Upload,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type ArtistProfile = {
   artistSummary: string;
@@ -64,11 +63,11 @@ function isPdf(file: File) {
 
 function PillList({ items }: { items: string[] }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-y-1">
       {items.map((item) => (
         <span
           key={item}
-          className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-sm text-zinc-600"
+          className="bg-[var(--color-paper)] px-3 py-1 text-sm font-semibold text-zinc-700"
         >
           {item}
         </span>
@@ -123,21 +122,22 @@ export function PortfolioMatchFlow() {
   }
 
   return (
-    <section className="rounded-3xl border border-zinc-200 bg-white p-5 sm:p-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+    <section className="bg-[var(--color-sand)]">
+      <div className="editorial-band-inner">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div>
-          <p className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700 [text-shadow:0_0_18px_rgba(4,120,87,0.5)]">
+          <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-700">
             <Sparkles className="size-4" />
             Portfolio matching
           </p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
+          <h2 className="mt-5 text-4xl font-bold tracking-tight text-zinc-950 sm:text-5xl">
             上传作品集，生成匹配画像
           </h2>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-zinc-500">
+          <p className="mt-5 max-w-xl text-sm leading-7 text-zinc-600">
             当前为前端演示：不会上传文件到服务器，也不会调用真实 AI。系统会模拟从作品集里提取媒介、主题、阶段、预算敏感度和申请风险。
           </p>
 
-          <label className="mt-6 flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center transition hover:border-zinc-500 hover:bg-white">
+          <label className="mt-8 flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-black/35 bg-white/30 p-6 text-center transition hover:border-black/60 hover:bg-white/50">
             <Upload className="size-8 text-zinc-500" />
             <span className="mt-4 text-base font-semibold text-zinc-950">
               上传 Portfolio PDF
@@ -157,14 +157,15 @@ export function PortfolioMatchFlow() {
             <button
               type="button"
               onClick={() => startAnalysis("Sample portfolio · demo PDF")}
-              className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-5 text-sm font-medium text-zinc-950 transition hover:border-zinc-300 hover:bg-zinc-50"
+              className="text-arrow-action text-zinc-950"
             >
               Try with sample portfolio
+              <ArrowRight className="size-4" />
             </button>
             {profile ? (
               <a
                 href="#match-recommendations"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
+                className="text-arrow-action text-zinc-950"
               >
                 Find my matches
                 <ArrowRight className="size-4" />
@@ -174,7 +175,7 @@ export function PortfolioMatchFlow() {
 
           {error ? (
             <p
-              className="mt-4 flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+              className="mt-4 flex items-center gap-2 bg-[var(--color-clay)] p-3 text-sm text-red-950"
               role="alert"
             >
               <AlertCircle className="size-4 shrink-0" />
@@ -190,15 +191,7 @@ export function PortfolioMatchFlow() {
           ) : null}
         </div>
 
-        <div
-          className={cn(
-            "rounded-3xl border p-5 sm:p-6",
-            profile
-              ? "border-zinc-200 bg-[#fbfaf6]"
-              : "border-zinc-200 bg-zinc-50",
-          )}
-          aria-live="polite"
-        >
+        <div className="border-t border-black/25 pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0" aria-live="polite">
           {isAnalyzing ? (
             <div className="flex min-h-96 flex-col items-center justify-center text-center">
               <Loader2 className="size-9 animate-spin text-zinc-950" />
@@ -210,9 +203,7 @@ export function PortfolioMatchFlow() {
           ) : profile ? (
             <div>
               <div className="flex items-start gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-white">
-                  <CheckCircle2 className="size-5" />
-                </span>
+                <CheckCircle2 className="mt-1 size-6 shrink-0" />
                 <div>
                   <p className="text-sm font-medium text-zinc-500">
                     Mock Artist Profile
@@ -242,31 +233,31 @@ export function PortfolioMatchFlow() {
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-zinc-200 bg-white p-4">
+              <div className="mt-6 grid border-t border-black/25 sm:grid-cols-2">
+                <div className="border-b border-black/15 py-4 pr-4 sm:border-r">
                   <p className="text-sm text-zinc-500">Career stage</p>
                   <p className="mt-2 font-semibold">{profile.careerStage}</p>
                 </div>
-                <div className="rounded-2xl border border-zinc-200 bg-white p-4">
+                <div className="border-b border-black/15 py-4 sm:pl-4">
                   <p className="text-sm text-zinc-500">Budget sensitivity</p>
                   <p className="mt-2 font-semibold">{profile.budgetSensitivity}</p>
                 </div>
-                <div className="rounded-2xl border border-zinc-200 bg-white p-4">
+                <div className="border-b border-black/15 py-4 pr-4 sm:border-r">
                   <p className="text-sm text-zinc-500">Preferred regions</p>
                   <p className="mt-2 font-semibold">
                     {profile.preferredRegions.join(" / ")}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-zinc-200 bg-white p-4">
+                <div className="border-b border-black/15 py-4 sm:pl-4">
                   <p className="text-sm text-zinc-500">Languages</p>
                   <p className="mt-2 font-semibold">{profile.languages.join(" / ")}</p>
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-4 lg:grid-cols-2">
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-                  <p className="font-semibold text-emerald-900">Application strengths</p>
-                  <ul className="mt-3 space-y-2 text-sm leading-6 text-emerald-800">
+              <div className="mt-6 grid lg:grid-cols-2">
+                <div className="bg-[var(--color-sage)] p-5">
+                  <p className="font-semibold text-zinc-950">Application strengths</p>
+                  <ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-700">
                     {profile.applicationStrengths.map((item) => (
                       <li key={item} className="flex gap-2">
                         <CheckCircle2 className="mt-1 size-4 shrink-0" />
@@ -275,9 +266,9 @@ export function PortfolioMatchFlow() {
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
-                  <p className="font-semibold text-amber-900">Possible risks</p>
-                  <ul className="mt-3 space-y-2 text-sm leading-6 text-amber-800">
+                <div className="bg-[var(--color-clay)] p-5">
+                  <p className="font-semibold text-zinc-950">Possible risks</p>
+                  <ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-700">
                     {profile.possibleRisks.map((item) => (
                       <li key={item} className="flex gap-2">
                         <AlertCircle className="mt-1 size-4 shrink-0" />
@@ -298,6 +289,7 @@ export function PortfolioMatchFlow() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </section>
   );

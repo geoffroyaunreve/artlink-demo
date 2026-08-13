@@ -184,54 +184,55 @@ export function OpportunityExplorer() {
   }
 
   return (
-    <div className="space-y-5">
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
-          <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-zinc-500">
-              <SlidersHorizontal className="size-4" />
-              驻留筛选
-            </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-              找到适合你的可信驻留项目
-            </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
-              按媒介、成本、住宿、语言和申请资格筛选，不只看项目标题，也看现实条件是否可行。
-            </p>
+    <div>
+      <section className="bg-[var(--color-paper)]">
+        <div className="editorial-band-inner">
+          <div className="flex flex-col gap-8 xl:flex-row xl:items-end">
+            <div>
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-zinc-700">
+                <SlidersHorizontal className="size-4" />
+                驻留筛选
+              </p>
+              <h1 className="mt-5 max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+                找到适合你的可信驻留项目
+              </h1>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-zinc-700">
+                按媒介、成本、住宿、语言和申请资格筛选，不只看项目标题，也看现实条件是否可行。
+              </p>
+            </div>
+
+            <label className="relative ml-auto block w-full border-b border-black/40 xl:max-w-md">
+              <Search className="pointer-events-none absolute left-0 top-1/2 size-4 -translate-y-1/2 text-zinc-700" />
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                className="h-12 w-full bg-transparent pl-7 pr-2 text-sm text-zinc-950 outline-none placeholder:text-zinc-600 focus:border-zinc-950"
+                placeholder="搜索国家、城市、机构、媒介或费用条件"
+              />
+            </label>
           </div>
 
-          <label className="relative ml-auto block w-full xl:max-w-md">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              className="h-11 w-full rounded-full border border-zinc-200 bg-zinc-50 pl-10 pr-4 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-950 focus:bg-white"
-              placeholder="搜索国家、城市、机构、媒介或费用条件"
-            />
-          </label>
-        </div>
-
-        <div className="mt-5 space-y-4">
+          <div className="mt-12 space-y-5 border-t border-black/25 pt-7">
           <div className="grid gap-3 lg:grid-cols-[110px_minmax(0,1fr)_220px_180px] lg:items-start">
-            <p className="pt-2 text-sm font-medium text-zinc-500">
+            <p className="pt-2 text-sm font-semibold text-zinc-700">
               按项目类别：
             </p>
             <div className="flex flex-wrap gap-2">
-            {types.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setType(item)}
-                className={cn(
-                  "h-10 rounded-full border px-4 text-sm transition",
-                  type === item
-                    ? "border-zinc-950 bg-zinc-950 text-white"
-                    : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400",
-                )}
-              >
-                {item}
-              </button>
-            ))}
+              {types.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setType(item)}
+                  className={cn(
+                    "min-h-10 rounded-md border px-4 py-2 text-sm transition",
+                    type === item
+                      ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
+                      : "border-black/25 bg-transparent text-zinc-700 hover:border-black/60",
+                  )}
+                >
+                  {item}
+                </button>
+              ))}
             </div>
 
             <div className="relative">
@@ -239,8 +240,8 @@ export function OpportunityExplorer() {
                 type="button"
                 onClick={() => setIsRegionOpen((current) => !current)}
                 className={cn(
-                  "flex h-10 w-full items-center gap-2 rounded-full border bg-white px-4 text-sm text-zinc-600 transition",
-                  isRegionOpen ? "border-zinc-950" : "border-zinc-200 hover:border-zinc-400",
+                  "flex h-10 w-full items-center gap-2 rounded-md border bg-transparent px-4 text-sm text-zinc-700 transition",
+                  isRegionOpen ? "border-zinc-950" : "border-black/25 hover:border-black/60",
                 )}
                 aria-expanded={isRegionOpen}
               >
@@ -255,7 +256,7 @@ export function OpportunityExplorer() {
               </button>
 
               {isRegionOpen ? (
-                <div className="absolute right-0 z-30 mt-2 w-[min(24rem,calc(100vw-3rem))] rounded-3xl border border-zinc-200 bg-white p-4 shadow-[0_18px_45px_rgba(0,0,0,0.12)]">
+                <div className="absolute right-0 z-30 mt-2 w-[min(24rem,calc(100vw-3rem))] rounded-xl border border-black/20 bg-[var(--color-paper)] p-4">
                   <p className="text-xs font-medium text-zinc-400">先按大洲</p>
                   <div className="mt-2 grid grid-cols-2 gap-2">
                     <button
@@ -265,10 +266,10 @@ export function OpportunityExplorer() {
                         setCountry(allLabel);
                       }}
                       className={cn(
-                        "h-9 rounded-full border px-3 text-sm transition",
+                        "h-9 rounded-md border px-3 text-sm transition",
                         region === allLabel
                           ? "border-zinc-950 bg-zinc-950 text-white"
-                          : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400",
+                          : "border-black/20 bg-transparent text-zinc-600 hover:border-zinc-500",
                       )}
                     >
                       全部地区
@@ -282,10 +283,10 @@ export function OpportunityExplorer() {
                           setCountry(allLabel);
                         }}
                         className={cn(
-                          "h-9 rounded-full border px-3 text-sm transition",
+                          "h-9 rounded-md border px-3 text-sm transition",
                           region === option.key
                             ? "border-zinc-950 bg-zinc-950 text-white"
-                            : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400",
+                            : "border-black/20 bg-transparent text-zinc-600 hover:border-zinc-500",
                         )}
                       >
                         {option.label}
@@ -306,10 +307,10 @@ export function OpportunityExplorer() {
                             setIsRegionOpen(false);
                           }}
                           className={cn(
-                            "h-9 rounded-full border px-3 text-sm transition",
+                            "h-9 rounded-md border px-3 text-sm transition",
                             country === allLabel
                               ? "border-zinc-950 bg-zinc-950 text-white"
-                              : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400",
+                              : "border-black/20 bg-transparent text-zinc-600 hover:border-zinc-500",
                           )}
                         >
                           该大洲全部
@@ -323,10 +324,10 @@ export function OpportunityExplorer() {
                               setIsRegionOpen(false);
                             }}
                             className={cn(
-                              "h-9 rounded-full border px-3 text-sm transition",
+                              "h-9 rounded-md border px-3 text-sm transition",
                               country === item
                                 ? "border-zinc-950 bg-zinc-950 text-white"
-                                : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400",
+                                : "border-black/20 bg-transparent text-zinc-600 hover:border-zinc-500",
                             )}
                           >
                             {item}
@@ -344,7 +345,7 @@ export function OpportunityExplorer() {
               ) : null}
             </div>
 
-            <label className="flex h-10 items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm text-zinc-600 transition focus-within:border-zinc-950">
+            <label className="flex h-10 items-center gap-2 rounded-md border border-black/25 bg-transparent px-4 text-sm text-zinc-700 transition focus-within:border-zinc-950">
               <span className="shrink-0 text-xs font-medium text-zinc-500">成本</span>
               <select
                 value={costLevel}
@@ -361,7 +362,7 @@ export function OpportunityExplorer() {
           </div>
 
           <div className="grid gap-3 lg:grid-cols-[110px_minmax(0,1fr)] lg:items-start">
-            <p className="pt-1.5 text-sm font-medium text-zinc-500">
+            <p className="pt-1.5 text-sm font-semibold text-zinc-700">
               按其他条件：
             </p>
             <div className="flex flex-wrap gap-2">
@@ -371,10 +372,10 @@ export function OpportunityExplorer() {
                   type="button"
                   onClick={() => toggleQuickFilter(filter.key)}
                   className={cn(
-                    "h-9 rounded-full border px-3 text-sm transition",
+                    "h-9 rounded-md border px-3 text-sm transition",
                     activeQuickFilters.includes(filter.key)
                       ? "border-emerald-600 bg-emerald-50 text-emerald-700"
-                      : "border-zinc-200 bg-white text-zinc-500 hover:border-zinc-400",
+                      : "border-black/25 bg-transparent text-zinc-700 hover:border-black/60",
                   )}
                 >
                   {filter.label}
@@ -383,33 +384,39 @@ export function OpportunityExplorer() {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-500">共 {filtered.length} 个精选驻留项目</p>
-        <p className="hidden items-center gap-2 text-sm text-zinc-400 sm:flex">
-          <Filter className="size-4" />
-          已按现实条件筛选
-        </p>
-      </div>
+      <section className="bg-[var(--tone-paper-soft)]">
+        <div className="editorial-band-inner">
+          <div className="flex items-center justify-between border-b border-black/20 pb-5">
+            <p className="text-sm font-semibold">共 {filtered.length} 个精选驻留项目</p>
+            <p className="hidden items-center gap-2 text-sm text-zinc-600 sm:flex">
+              <Filter className="size-4" />
+              已按现实条件筛选
+            </p>
+          </div>
 
-      {filtered.length ? (
-        <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((opportunity) => (
-            <OpportunityCard
-              key={opportunity.slug}
-              opportunity={opportunity}
-              compact
-              className="h-[520px]"
-            />
-          ))}
-        </section>
-      ) : (
-        <section className="rounded-2xl border border-dashed border-zinc-300 bg-white p-10 text-center">
-          <p className="text-lg font-semibold">暂时没有符合条件的驻留项目</p>
-          <p className="mt-2 text-sm text-zinc-500">放宽成本、住宿或申请资格条件后再试一次。</p>
-        </section>
-      )}
+          {filtered.length ? (
+            <div className="mt-6 grid gap-x-7 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((opportunity) => (
+                <OpportunityCard
+                  key={opportunity.slug}
+                  opportunity={opportunity}
+                  compact
+                  appearance="editorial"
+                  className="h-full"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="border-t border-black/25 py-16 text-center">
+              <p className="text-2xl font-bold">暂时没有符合条件的驻留项目</p>
+              <p className="mt-3 text-sm text-zinc-600">放宽成本、住宿或申请资格条件后再试一次。</p>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

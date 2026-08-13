@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import type { CSSProperties, ReactNode } from "react";
 import {
   Bell,
-  Building2,
   ChevronRight,
   ClipboardList,
   Home,
@@ -32,10 +31,8 @@ const topNav: NavItem[] = [
 
 const extraNav: NavItem[] = [
   { label: "我的匹配", href: "/matches", icon: Sparkles },
-  { label: "作品集主页", href: "/artists", icon: Home },
   { label: "材料助手", href: "/materials", icon: WandSparkles },
   { label: "驻留指南", href: "/guide", icon: MessageCircle },
-  { label: "机构发布", href: "/institution-entry", icon: Building2 },
 ];
 
 const menuNav: NavItem[] = [...topNav, ...extraNav];
@@ -48,15 +45,70 @@ function isActive(pathname: string, href: string) {
   return pathname.startsWith(href.replace("/#", "/"));
 }
 
-function Logo() {
+function getShellTheme(pathname: string) {
+  if (pathname === "/") {
+    return { background: "var(--color-sage)", dark: false };
+  }
+
+  if (pathname.startsWith("/opportunities")) {
+    return { background: "var(--color-paper)", dark: false };
+  }
+
+  if (pathname.startsWith("/applications") || pathname.startsWith("/notifications")) {
+    return { background: "var(--color-mist)", dark: false };
+  }
+
+  if (pathname.startsWith("/matches") || pathname.startsWith("/profile")) {
+    return { background: "var(--color-clay)", dark: false };
+  }
+
+  if (pathname.startsWith("/materials")) {
+    return { background: "var(--color-sage)", dark: false };
+  }
+
+  if (pathname.startsWith("/guide")) {
+    return { background: "var(--color-paper)", dark: false };
+  }
+
+  if (pathname.startsWith("/artist-entry")) {
+    return { background: "var(--color-charcoal)", dark: true };
+  }
+
+  return { background: "#ffffff", dark: false };
+}
+
+function isEditorialPath(pathname: string) {
+  return [
+    "/",
+    "/opportunities",
+    "/applications",
+    "/matches",
+    "/materials",
+    "/guide",
+    "/notifications",
+    "/profile",
+    "/artist-entry",
+  ].some((route) => route === "/" ? pathname === route : pathname.startsWith(route));
+}
+
+function Logo({ dark }: { dark: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-3" aria-label="ART LINK 首页">
-      <span className="relative block size-9">
-        <span className="absolute left-1 top-1 h-7 w-1.5 -skew-x-12 bg-white" />
-        <span className="absolute bottom-1 left-3 h-1.5 w-6 bg-white" />
-        <span className="absolute right-0 top-3 h-5 w-1.5 bg-white" />
+    <Link
+      href="/"
+      className="flex min-w-0 items-center gap-3"
+      aria-label="Residency Lab 驻留实验室首页"
+    >
+      <span
+        className={cn(
+          "size-7 shrink-0 rounded-full",
+          dark ? "bg-[var(--color-paper)]" : "bg-[var(--color-ink)]",
+        )}
+        aria-hidden="true"
+      />
+      <span className="whitespace-nowrap text-[1.375rem] font-bold leading-7 tracking-[-0.025em]">
+        Residency Lab
+        <span className="hidden sm:inline"> 驻留实验室</span>
       </span>
-      <span className="text-lg font-semibold tracking-tight">ART LINK</span>
     </Link>
   );
 }
@@ -64,24 +116,40 @@ function Logo() {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const isEditorialRoute = isEditorialPath(pathname);
+  const shellTheme = getShellTheme(pathname);
 
   return (
-    <div className="min-h-screen bg-[#f7f4ee] text-zinc-950">
+    <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)]">
       <div>
-        <header className="sticky top-0 z-30 border-b border-white/10 bg-black/70 text-white shadow-sm shadow-black/20 backdrop-blur-2xl">
+        <header
+          className={cn(
+            "sticky top-0 z-30 border-b transition-colors duration-200",
+            shellTheme.dark
+              ? "border-white/20 text-[var(--color-paper)]"
+              : "border-black/20 text-[var(--color-ink)]",
+          )}
+          style={{ backgroundColor: shellTheme.background }}
+          data-shell-background={shellTheme.background}
+          data-shell-tone={shellTheme.dark ? "dark" : "light"}
+        >
           <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 xl:px-8">
-            <Logo />
+            <Logo dark={shellTheme.dark} />
 
-            <nav className="hidden items-center gap-3 text-sm font-medium xl:flex">
+            <nav className="hidden items-center gap-7 text-sm font-semibold xl:flex">
               {topNav.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    "rounded-full border px-4 py-2 transition",
+                    "border-b py-2 transition",
                     isActive(pathname, item.href)
-                      ? "border-white bg-white text-zinc-950"
-                      : "border-transparent text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900 hover:text-white",
+                      ? shellTheme.dark
+                        ? "border-[var(--color-paper)] text-[var(--color-paper)]"
+                        : "border-[var(--color-ink)] text-[var(--color-ink)]"
+                      : shellTheme.dark
+                        ? "border-transparent text-white/65 hover:border-white/50 hover:text-[var(--color-paper)]"
+                        : "border-transparent text-black/55 hover:border-black/40 hover:text-[var(--color-ink)]",
                   )}
                 >
                   {item.label}
@@ -89,10 +157,20 @@ export function AppShell({ children }: { children: ReactNode }) {
               ))}
             </nav>
 
-            <div className="ml-auto hidden h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 px-0 backdrop-blur-xl transition-all md:flex xl:w-64 xl:justify-start xl:px-4">
-              <Search className="size-4 text-zinc-500" />
+            <div
+              className={cn(
+                "ml-auto hidden h-10 w-10 items-center justify-center border-b px-0 transition-all md:flex xl:w-64 xl:justify-start",
+                shellTheme.dark ? "border-white/30" : "border-black/25",
+              )}
+            >
+              <Search className={cn("size-4", shellTheme.dark ? "text-white/65" : "text-black/55")} />
               <input
-                className="hidden h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-zinc-100 outline-none placeholder:text-zinc-500 xl:block"
+                className={cn(
+                  "hidden h-full min-w-0 flex-1 bg-transparent px-3 text-sm outline-none xl:block",
+                  shellTheme.dark
+                    ? "text-[var(--color-paper)] placeholder:text-white/45"
+                    : "text-[var(--color-ink)] placeholder:text-black/45",
+                )}
                 placeholder="搜索驻留项目、国家、机构、媒介..."
               />
             </div>
@@ -101,24 +179,46 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 href="/notifications"
                 title="通知"
-                className="flex size-10 items-center justify-center rounded-full border border-transparent text-zinc-400 transition hover:border-zinc-800 hover:bg-zinc-900 hover:text-white"
+                className={cn(
+                  "flex size-10 items-center justify-center rounded-full border border-transparent transition",
+                  shellTheme.dark
+                    ? "text-[var(--color-paper)] hover:border-white/20 hover:bg-white/10"
+                    : "text-[var(--color-ink)] hover:border-black/15 hover:bg-black/5",
+                )}
                 aria-label="消息通知"
               >
                 <Bell className="size-5" />
               </Link>
               <Link
                 href="/profile"
-                className="flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-medium text-zinc-200 backdrop-blur-xl"
+                className={cn(
+                  "flex size-10 items-center justify-center rounded-full border border-transparent text-sm font-medium transition",
+                  shellTheme.dark
+                    ? "text-[var(--color-paper)] hover:border-white/20 hover:bg-white/10"
+                    : "text-[var(--color-ink)] hover:border-black/15 hover:bg-black/5",
+                )}
                 aria-label="个人主页"
               >
-                <span className="flex size-8 items-center justify-center rounded-full bg-white text-zinc-950">
+                <span
+                  className={cn(
+                    "flex size-8 items-center justify-center rounded-full border",
+                    shellTheme.dark
+                      ? "border-white/35 bg-white/10 text-[var(--color-paper)]"
+                      : "border-black/30 bg-white/30 text-[var(--color-ink)]",
+                  )}
+                >
                   A
                 </span>
               </Link>
               <button
                 type="button"
                 onClick={() => setMenuOpen((open) => !open)}
-                className="group inline-flex size-10 items-center justify-center rounded-full border border-transparent text-white transition hover:border-zinc-800 hover:bg-zinc-900"
+                className={cn(
+                  "group inline-flex size-10 items-center justify-center rounded-full border border-transparent transition",
+                  shellTheme.dark
+                    ? "text-[var(--color-paper)] hover:border-white/20 hover:bg-white/10"
+                    : "text-[var(--color-ink)] hover:border-black/15 hover:bg-black/5",
+                )}
                 aria-expanded={menuOpen}
                 aria-label={menuOpen ? "收起导航菜单" : "展开更多导航"}
               >
@@ -149,15 +249,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div
             data-menu-panel="true"
             className={cn(
-              "frosted-menu-panel absolute left-0 right-0 top-full overflow-hidden border-t border-white/10 px-4 shadow-[0_24px_70px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-300 ease-out [backdrop-filter:blur(80px)_saturate(150%)] sm:px-6 xl:px-8",
+              "absolute left-0 right-0 top-full overflow-hidden border-y px-4 transition-all duration-300 ease-out sm:px-6 xl:px-8",
+              shellTheme.dark ? "border-white/20" : "border-black/15",
               menuOpen
                 ? "pointer-events-auto max-h-[80vh] translate-y-0 opacity-100"
                 : "pointer-events-none max-h-0 -translate-y-3 opacity-0",
             )}
             style={{
-              backdropFilter: "blur(80px) saturate(150%)",
-              WebkitBackdropFilter: "blur(80px) saturate(150%)",
-              background: "rgba(0, 0, 0, 0.7)",
+              backgroundColor: shellTheme.background,
             }}
             aria-hidden={!menuOpen}
           >
@@ -177,8 +276,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                         "flex min-h-14 items-center justify-between px-1 text-lg font-medium transition sm:text-xl",
                         menuOpen ? "menu-panel-item" : "opacity-0",
                         active
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-white",
+                          ? shellTheme.dark
+                            ? "text-[var(--color-paper)]"
+                            : "text-[var(--color-ink)]"
+                          : shellTheme.dark
+                            ? "text-white/65 hover:text-[var(--color-paper)]"
+                            : "text-black/55 hover:text-[var(--color-ink)]",
                       )}
                       style={{ "--menu-index": index } as CSSProperties}
                     >
@@ -195,7 +298,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <main className="px-4 py-8 sm:px-6 xl:px-8">{children}</main>
+        <main className={isEditorialRoute ? "" : "px-4 py-8 sm:px-6 xl:px-8"}>
+          {children}
+        </main>
       </div>
     </div>
   );

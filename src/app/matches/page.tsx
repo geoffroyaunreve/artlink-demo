@@ -1,98 +1,79 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { getArtistBySlug, getOpportunityBySlug, projectMatches } from "@/data/mockData";
+import { getOpportunityBySlug, projectMatches } from "@/data/mockData";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { PortfolioMatchFlow } from "@/components/PortfolioMatchFlow";
 
 export const metadata = {
-  title: "我的匹配 | ART LINK",
+  title: "我的匹配 | Residency Lab 驻留实验室",
 };
 
 export default function MatchesPage() {
   return (
-    <div className="space-y-6">
-      <section className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8">
-        <p className="text-sm font-medium uppercase tracking-[0.16em] text-zinc-500">
-          Match Review
-        </p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight">
-          我的驻留匹配
-        </h1>
-        <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-500">
-          匹配分不是只看作品风格，而是同时评估媒介、主题、艺术家阶段、预算、语言、住宿、截止日期和申请材料可行性。
-        </p>
+    <div>
+      <section className="bg-[var(--color-clay)]">
+        <div className="editorial-band-inner">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-700">Match Review</p>
+          <h1 className="mt-5 max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">我的驻留匹配</h1>
+          <p className="mt-6 max-w-3xl text-base leading-8 text-zinc-700">
+            匹配分不是只看作品风格，而是同时评估媒介、主题、艺术家阶段、预算、语言、住宿、截止日期和申请材料可行性。
+          </p>
+        </div>
       </section>
 
       <PortfolioMatchFlow />
 
-      <section id="match-recommendations" className="grid scroll-mt-28 gap-5 xl:grid-cols-2">
-        {projectMatches.map((match) => {
-          const artist = getArtistBySlug(match.artistSlug);
-          const opportunity = getOpportunityBySlug(match.opportunitySlug);
+      <section id="match-recommendations" className="scroll-mt-28 bg-[var(--tone-clay-soft)]">
+        <div className="editorial-band-inner">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-600">Recommended matches</p>
+          <h2 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">匹配推荐</h2>
+          <div className="mt-12 grid gap-x-10 gap-y-12 xl:grid-cols-2">
+            {projectMatches.map((match) => {
+              const opportunity = getOpportunityBySlug(match.opportunitySlug);
 
-          if (!artist || !opportunity) {
-            return null;
-          }
+              if (!opportunity) {
+                return null;
+              }
 
-          return (
-            <article
-              key={`${match.artistSlug}-${match.opportunitySlug}`}
-              className="relative rounded-2xl border border-zinc-200 bg-white p-5"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="pr-12">
-                  <p className="text-sm text-zinc-500">
-                    推荐给 {artist.name} · {artist.discipline}
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold">{opportunity.title}</h2>
-                  <p className="mt-2 text-sm text-zinc-500">
-                    {opportunity.location} · {opportunity.type} · {opportunity.costLevel}
-                  </p>
-                </div>
-                <div className="mr-12 rounded-xl bg-zinc-950 px-4 py-3 text-center text-white">
-                  <p className="text-3xl font-semibold">{match.score}%</p>
-                  <p className="text-xs text-zinc-300">匹配度</p>
-                </div>
-              </div>
-              <FavoriteButton
-                slug={opportunity.slug}
-                title={opportunity.title}
-                className="absolute right-5 top-5"
-              />
+              return (
+                <article key={match.opportunitySlug} className="relative border-t border-black/25 py-7">
+                  <div className="grid gap-5 pr-14 sm:grid-cols-[minmax(0,1fr)_auto]">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-zinc-500">基于你的匹配资料</p>
+                      <h3 className="mt-3 text-2xl font-bold">{opportunity.title}</h3>
+                      <p className="mt-3 text-sm text-zinc-600">{opportunity.location} · {opportunity.type} · {opportunity.costLevel}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-zinc-500">匹配度</p>
+                      <p className="mt-1 text-5xl font-bold tracking-tight">{match.score}%</p>
+                    </div>
+                  </div>
+                  <FavoriteButton slug={opportunity.slug} title={opportunity.title} className="absolute right-0 top-5" />
 
-              <div className="mt-5 grid gap-3 md:grid-cols-2">
-                {match.reasons.map((reason) => (
-                  <p
-                    key={reason}
-                    className="flex gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm leading-6 text-emerald-800"
-                  >
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
-                    {reason}
-                  </p>
-                ))}
-              </div>
+                  <div className="mt-7 grid md:grid-cols-2">
+                    {match.reasons.map((reason) => (
+                      <p key={reason} className="flex gap-2 border-t border-black/15 py-4 pr-5 text-sm leading-6 text-zinc-700">
+                        <CheckCircle2 className="mt-1 size-4 shrink-0" />
+                        {reason}
+                      </p>
+                    ))}
+                  </div>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {opportunity.trustTags.slice(0, 4).map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-zinc-200 px-3 py-1 text-sm text-zinc-500"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                  <div className="mt-5 flex flex-wrap gap-y-1">
+                    {opportunity.trustTags.slice(0, 4).map((tag) => (
+                      <span key={tag} className="bg-[var(--color-sage)] px-3 py-1 text-xs font-bold text-zinc-800">{tag}</span>
+                    ))}
+                  </div>
 
-              <Link
-                href={`/opportunities/${opportunity.slug}`}
-                className="mt-5 inline-flex h-10 items-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white"
-              >
-                查看匹配详情
-                <ArrowRight className="size-4" />
-              </Link>
-            </article>
-          );
-        })}
+                  <Link href={`/opportunities/${opportunity.slug}`} className="text-arrow-action mt-6 text-zinc-950">
+                    查看匹配详情
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
+        </div>
       </section>
     </div>
   );

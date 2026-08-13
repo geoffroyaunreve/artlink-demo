@@ -49,7 +49,6 @@ export type Opportunity = {
   deadline: string;
   daysLeft: number;
   duration: string;
-  image: string;
   summary: string;
   description: string;
   support: string;
@@ -113,7 +112,6 @@ export type Artist = {
 };
 
 export type ProjectMatch = {
-  artistSlug: string;
   opportunitySlug: string;
   score: number;
   reasons: string[];
@@ -156,11 +154,7 @@ export type CommunityPost = {
   author: string;
   time: string;
   comments: number;
-  avatar: string;
 };
-
-export const heroImage =
-  "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=80";
 
 export const platformStats = [
   { value: "92%", label: "项目标注费用与住宿信息" },
@@ -272,8 +266,6 @@ const coreOpportunities: Opportunity[] = [
     deadline: "2026.07.13",
     daysLeft: 12,
     duration: "8 周",
-    image:
-      "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
     summary:
       "面向亚洲青年艺术家的海岛研究与创作驻留，关注生态、影像和社区语境。",
     description:
@@ -343,8 +335,6 @@ const coreOpportunities: Opportunity[] = [
     deadline: "2026.08.10",
     daysLeft: 40,
     duration: "6 周",
-    image:
-      "https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=1200&q=80",
     summary:
       "面向关注城市、公共空间与记忆议题的青年艺术家，适合首次驻留申请。",
     description:
@@ -411,8 +401,6 @@ const coreOpportunities: Opportunity[] = [
     deadline: "2026.09.01",
     daysLeft: 62,
     duration: "10 周",
-    image:
-      "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1200&q=80",
     summary:
       "支持实时影像、声音、交互装置与新媒体实验，适合已有技术作品基础的青年艺术家。",
     description:
@@ -479,8 +467,6 @@ const coreOpportunities: Opportunity[] = [
     deadline: "2026.07.30",
     daysLeft: 29,
     duration: "4 周",
-    image:
-      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?auto=format&fit=crop&w=1200&q=80",
     summary:
       "为首次申请驻留的青年艺术家提供短期工作室、导师反馈和作品集梳理。",
     description:
@@ -541,8 +527,6 @@ const coreOpportunities: Opportunity[] = [
     deadline: "2026.08.24",
     daysLeft: 54,
     duration: "5 周",
-    image:
-      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
     summary:
       "围绕山城街巷、声音采集与社区访谈展开的研究型驻留，中文材料即可申请。",
     description:
@@ -610,8 +594,6 @@ const coreOpportunities: Opportunity[] = [
     deadline: "2026.09.18",
     daysLeft: 79,
     duration: "6 周",
-    image:
-      "https://images.unsplash.com/photo-1516542076529-1ea3854896f2?auto=format&fit=crop&w=1200&q=80",
     summary:
       "面向写作、策展与影像研究方向的青年创作者，聚焦海岸城市、影像档案与公共项目。",
     description:
@@ -696,21 +678,6 @@ type DemoResidencySeed = {
   travelSupport: string;
   status?: OpportunityStatus;
 };
-
-const demoResidencyImages = [
-  "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1516542076529-1ea3854896f2?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80",
-];
 
 const demoResidencySeeds: DemoResidencySeed[] = [
   {
@@ -2127,7 +2094,6 @@ const generatedOpportunities: Opportunity[] = demoResidencySeeds.map((seed, inde
     deadline: seed.deadline,
     daysLeft: seed.daysLeft,
     duration: seed.duration,
-    image: demoResidencyImages[index % demoResidencyImages.length],
     summary: seed.summary,
     description: `${seed.summary} 项目以 ${seed.themeTags.join("、")} 为主要语境，适合使用 ${seed.mediumTags.join("、")} 等媒介推进研究或创作。该记录为本地 demo 数据，用于展示未来驻留数据库、搜索筛选和匹配评分能力。`,
     support: `${seed.accommodation}；${seed.studio}；${seed.stipend}；${seed.travelSupport}`,
@@ -2423,25 +2389,21 @@ export const artists: Artist[] = [
 
 export const projectMatches: ProjectMatch[] = [
   {
-    artistSlug: "lin-yiran",
     opportunitySlug: "shoreline-asian-young-artists",
     score: 86,
     reasons: ["影像与装置媒介匹配", "无申请费且提供住宿", "接受中国青年艺术家"],
   },
   {
-    artistSlug: "ake-lau",
     opportunitySlug: "river-city-research-residency",
     score: 91,
     reasons: ["研究主题契合城市公共空间", "中文材料友好", "适合低预算申请"],
   },
   {
-    artistSlug: "mia-shen",
     opportunitySlug: "nordic-media-lab",
     score: 78,
     reasons: ["新媒体方向匹配", "设备支持明确", "需评估项目费和签证成本"],
   },
   {
-    artistSlug: "chen-mo",
     opportunitySlug: "south-studio-first-residency",
     score: 88,
     reasons: ["适合首次驻留", "中文申请材料", "提供导师反馈和工作位"],
@@ -2631,24 +2593,18 @@ export const communityPosts: CommunityPost[] = [
     author: "Luna",
     time: "2 小时前",
     comments: 23,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
   },
   {
     title: "英文 Artist Statement 需要多学术？",
     author: "阿树",
     time: "5 小时前",
     comments: 17,
-    avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
   },
   {
     title: "研究型驻留和生产型驻留的 proposal 区别",
     author: "策展小白",
     time: "8 小时前",
     comments: 31,
-    avatar:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
   },
 ];
 
