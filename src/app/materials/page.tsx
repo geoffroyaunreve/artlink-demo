@@ -22,7 +22,7 @@ export default function MaterialsPage() {
       </section>
 
       {exampleOpportunity ? (
-        <section className="bg-[var(--color-mist)] text-[var(--color-ink)]">
+        <section className="border-t border-black/25 bg-[var(--color-sage)] text-[var(--color-ink)]">
           <div className="editorial-band-inner">
             <div className="flex items-start gap-4">
               <WandSparkles className="mt-1 size-6 shrink-0" />

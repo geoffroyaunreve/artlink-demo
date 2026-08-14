@@ -122,7 +122,7 @@ export function PortfolioMatchFlow() {
   }
 
   return (
-    <section className="bg-[var(--color-sand)]">
+    <section className="border-t border-black/25 bg-[var(--color-clay)]">
       <div className="editorial-band-inner">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div>
@@ -255,7 +255,7 @@ export function PortfolioMatchFlow() {
               </div>
 
               <div className="mt-6 grid lg:grid-cols-2">
-                <div className="bg-[var(--color-sage)] p-5">
+                <div className="bg-[var(--color-mist)] p-5">
                   <p className="font-semibold text-zinc-950">Application strengths</p>
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-700">
                     {profile.applicationStrengths.map((item) => (
@@ -266,7 +266,7 @@ export function PortfolioMatchFlow() {
                     ))}
                   </ul>
                 </div>
-                <div className="bg-[var(--color-clay)] p-5">
+                <div className="bg-[var(--color-sand)] p-5">
                   <p className="font-semibold text-zinc-950">Possible risks</p>
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-zinc-700">
                     {profile.possibleRisks.map((item) => (

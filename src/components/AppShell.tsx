@@ -3,36 +3,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties, ReactNode } from "react";
-import {
-  Bell,
-  ChevronRight,
-  ClipboardList,
-  Home,
-  MessageCircle,
-  Search,
-  Sparkles,
-  WandSparkles,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ChevronRight, UserRound } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
   label: string;
   href: string;
-  icon: LucideIcon;
 };
 
 const topNav: NavItem[] = [
-  { label: "首页", href: "/", icon: Home },
-  { label: "驻留机会", href: "/opportunities", icon: Search },
-  { label: "申请清单", href: "/applications", icon: ClipboardList },
+  { label: "首页", href: "/" },
+  { label: "驻留机会", href: "/opportunities" },
+  { label: "申请清单", href: "/applications" },
 ];
 
 const extraNav: NavItem[] = [
-  { label: "我的匹配", href: "/matches", icon: Sparkles },
-  { label: "材料助手", href: "/materials", icon: WandSparkles },
-  { label: "驻留指南", href: "/guide", icon: MessageCircle },
+  { label: "我的匹配", href: "/matches" },
+  { label: "材料助手", href: "/materials" },
+  { label: "驻留指南", href: "/guide" },
+  { label: "关于Residency Lab", href: "/about" },
 ];
 
 const menuNav: NavItem[] = [...topNav, ...extraNav];
@@ -66,6 +56,10 @@ function getShellTheme(pathname: string) {
     return { background: "var(--color-sage)", dark: false };
   }
 
+  if (pathname.startsWith("/about")) {
+    return { background: "var(--color-sage)", dark: false };
+  }
+
   if (pathname.startsWith("/guide")) {
     return { background: "var(--color-paper)", dark: false };
   }
@@ -88,6 +82,7 @@ function isEditorialPath(pathname: string) {
     "/notifications",
     "/profile",
     "/artist-entry",
+    "/about",
   ].some((route) => route === "/" ? pathname === route : pathname.startsWith(route));
 }
 
@@ -95,19 +90,18 @@ function Logo({ dark }: { dark: boolean }) {
   return (
     <Link
       href="/"
-      className="flex min-w-0 items-center gap-3"
-      aria-label="Residency Lab 驻留实验室首页"
+      className="flex min-w-0 items-center gap-2"
+      aria-label="Residency Lab 首页"
     >
       <span
         className={cn(
-          "size-7 shrink-0 rounded-full",
+          "size-6 shrink-0 rounded-full sm:size-8 xl:size-9",
           dark ? "bg-[var(--color-paper)]" : "bg-[var(--color-ink)]",
         )}
         aria-hidden="true"
       />
-      <span className="whitespace-nowrap text-[1.375rem] font-bold leading-7 tracking-[-0.025em]">
+      <span className="whitespace-nowrap text-[1.75rem] font-bold leading-none tracking-[-0.035em] sm:text-[2.125rem] xl:text-[2.375rem]">
         Residency Lab
-        <span className="hidden sm:inline"> 驻留实验室</span>
       </span>
     </Link>
   );
@@ -116,6 +110,7 @@ function Logo({ dark }: { dark: boolean }) {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hoveredMenuHref, setHoveredMenuHref] = useState<string | null>(null);
   const isEditorialRoute = isEditorialPath(pathname);
   const shellTheme = getShellTheme(pathname);
 
@@ -136,7 +131,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex min-h-20 items-center gap-4 px-4 sm:px-6 xl:px-8">
             <Logo dark={shellTheme.dark} />
 
-            <nav className="hidden items-center gap-7 text-sm font-semibold xl:flex">
+            <nav className="hidden items-center gap-7 text-2xl font-semibold xl:flex">
               {topNav.map((item) => (
                 <Link
                   key={item.label}
@@ -157,64 +152,28 @@ export function AppShell({ children }: { children: ReactNode }) {
               ))}
             </nav>
 
-            <div
-              className={cn(
-                "ml-auto hidden h-10 w-10 items-center justify-center border-b px-0 transition-all md:flex xl:w-64 xl:justify-start",
-                shellTheme.dark ? "border-white/30" : "border-black/25",
-              )}
-            >
-              <Search className={cn("size-4", shellTheme.dark ? "text-white/65" : "text-black/55")} />
-              <input
-                className={cn(
-                  "hidden h-full min-w-0 flex-1 bg-transparent px-3 text-sm outline-none xl:block",
-                  shellTheme.dark
-                    ? "text-[var(--color-paper)] placeholder:text-white/45"
-                    : "text-[var(--color-ink)] placeholder:text-black/45",
-                )}
-                placeholder="搜索驻留项目、国家、机构、媒介..."
-              />
-            </div>
-
-            <div className="ml-auto flex items-center gap-2 md:ml-0">
-              <Link
-                href="/notifications"
-                title="通知"
-                className={cn(
-                  "flex size-10 items-center justify-center rounded-full border border-transparent transition",
-                  shellTheme.dark
-                    ? "text-[var(--color-paper)] hover:border-white/20 hover:bg-white/10"
-                    : "text-[var(--color-ink)] hover:border-black/15 hover:bg-black/5",
-                )}
-                aria-label="消息通知"
-              >
-                <Bell className="size-5" />
-              </Link>
+            <div className="ml-auto flex items-center gap-2">
               <Link
                 href="/profile"
                 className={cn(
-                  "flex size-10 items-center justify-center rounded-full border border-transparent text-sm font-medium transition",
+                  "flex size-12 items-center justify-center transition-opacity hover:opacity-60",
                   shellTheme.dark
-                    ? "text-[var(--color-paper)] hover:border-white/20 hover:bg-white/10"
-                    : "text-[var(--color-ink)] hover:border-black/15 hover:bg-black/5",
+                    ? "text-[var(--color-paper)]"
+                    : "text-[var(--color-ink)]",
                 )}
                 aria-label="个人主页"
+                title="个人主页"
               >
-                <span
-                  className={cn(
-                    "flex size-8 items-center justify-center rounded-full border",
-                    shellTheme.dark
-                      ? "border-white/35 bg-white/10 text-[var(--color-paper)]"
-                      : "border-black/30 bg-white/30 text-[var(--color-ink)]",
-                  )}
-                >
-                  A
-                </span>
+                <UserRound className="size-8 stroke-[1.75]" aria-hidden="true" />
               </Link>
               <button
                 type="button"
-                onClick={() => setMenuOpen((open) => !open)}
+                onClick={() => {
+                  setMenuOpen((open) => !open);
+                  setHoveredMenuHref(null);
+                }}
                 className={cn(
-                  "group inline-flex size-10 items-center justify-center rounded-full border border-transparent transition",
+                  "group inline-flex size-12 items-center justify-center rounded-full border border-transparent transition",
                   shellTheme.dark
                     ? "text-[var(--color-paper)] hover:border-white/20 hover:bg-white/10"
                     : "text-[var(--color-ink)] hover:border-black/15 hover:bg-black/5",
@@ -222,23 +181,23 @@ export function AppShell({ children }: { children: ReactNode }) {
                 aria-expanded={menuOpen}
                 aria-label={menuOpen ? "收起导航菜单" : "展开更多导航"}
               >
-                <span className="relative flex size-5 items-center justify-center" aria-hidden="true">
+                <span className="relative flex size-7 items-center justify-center" aria-hidden="true">
                   <span
                     className={cn(
-                      "absolute h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ease-out",
-                      menuOpen ? "translate-y-0 rotate-45" : "-translate-y-1.5 rotate-0",
+                      "absolute h-0.5 w-7 rounded-full bg-current transition-transform duration-300 ease-out",
+                      menuOpen ? "translate-y-0 rotate-45" : "-translate-y-2 rotate-0",
                     )}
                   />
                   <span
                     className={cn(
-                      "absolute h-0.5 w-5 rounded-full bg-current transition-all duration-200 ease-out",
+                      "absolute h-0.5 w-7 rounded-full bg-current transition-all duration-200 ease-out",
                       menuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
                     )}
                   />
                   <span
                     className={cn(
-                      "absolute h-0.5 w-5 rounded-full bg-current transition-transform duration-300 ease-out",
-                      menuOpen ? "translate-y-0 -rotate-45" : "translate-y-1.5 rotate-0",
+                      "absolute h-0.5 w-7 rounded-full bg-current transition-transform duration-300 ease-out",
+                      menuOpen ? "translate-y-0 -rotate-45" : "translate-y-2 rotate-0",
                     )}
                   />
                 </span>
@@ -261,19 +220,24 @@ export function AppShell({ children }: { children: ReactNode }) {
             aria-hidden={!menuOpen}
           >
             <div className="relative py-5">
-              <div className="mx-auto flex max-w-3xl flex-col">
+              <div className="flex w-full flex-col">
                 {menuNav.map((item, index) => {
-                  const Icon = item.icon;
                   const active = isActive(pathname, item.href);
+                  const showTriangle = hoveredMenuHref === item.href || (hoveredMenuHref === null && active);
 
                   return (
                     <Link
                       key={item.label}
                       href={item.href}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setHoveredMenuHref(null);
+                      }}
+                      onMouseEnter={() => setHoveredMenuHref(item.href)}
+                      onMouseLeave={() => setHoveredMenuHref(null)}
                       tabIndex={menuOpen ? 0 : -1}
                       className={cn(
-                        "flex min-h-14 items-center justify-between px-1 text-lg font-medium transition sm:text-xl",
+                        "flex h-14 w-full items-center justify-between px-0 text-[1.375rem] font-medium leading-none transition sm:text-[1.5rem]",
                         menuOpen ? "menu-panel-item" : "opacity-0",
                         active
                           ? shellTheme.dark
@@ -285,11 +249,19 @@ export function AppShell({ children }: { children: ReactNode }) {
                       )}
                       style={{ "--menu-index": index } as CSSProperties}
                     >
-                      <span className="flex items-center gap-3">
-                        <Icon className="size-5" />
+                      <span className="flex min-w-0 items-center gap-3">
+                        <span
+                          className={cn(
+                            "relative flex size-[1.375rem] shrink-0 items-center justify-center transition-opacity duration-150 sm:size-6",
+                            showTriangle ? "opacity-100" : "opacity-0",
+                          )}
+                          aria-hidden="true"
+                        >
+                          <span className="absolute h-[1em] w-[1.1547em] bg-current [clip-path:polygon(50%_0,100%_100%,0_100%)]" />
+                        </span>
                         {item.label}
                       </span>
-                      <ChevronRight className="size-5" />
+                      <ChevronRight className="size-6" />
                     </Link>
                   );
                 })}

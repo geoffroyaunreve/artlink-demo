@@ -31,7 +31,7 @@ export default function ApplicationsPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--tone-mist-soft)]">
+      <section className="border-t border-black/25 bg-[var(--color-mist)]">
         <div className="editorial-band-inner">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-700">Application workflow</p>
           <div className="mt-8 grid border-t border-black/25 sm:grid-cols-2 lg:grid-cols-7">
