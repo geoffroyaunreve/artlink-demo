@@ -35,48 +35,39 @@ export function ProfileFavorites() {
   );
 
   return (
-    <section className="rounded-3xl border border-zinc-200 bg-white p-5 sm:p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500">
-            <Star className="size-4" />
-            Saved residencies
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950">
-            收藏驻留
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-zinc-500">
-            点击项目右上角的五角星后，会保存在这里，方便继续比较费用、截止日期和材料要求。
-          </p>
+    <section className="bg-[var(--color-paper)]">
+      <div className="editorial-band-inner">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-600">
+              <Star className="size-4" /> Saved residencies
+            </p>
+            <h2 className="mt-5 text-4xl font-bold tracking-tight text-zinc-950 sm:text-5xl">收藏驻留</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-600">
+              点击项目右上角的五角星后，会保存在这里，方便继续比较费用、截止日期和材料要求。
+            </p>
+          </div>
+          <Link href="/opportunities" className="text-arrow-action text-zinc-950">
+            浏览更多
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
-        <Link
-          href="/opportunities"
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
-        >
-          浏览更多
-          <ArrowRight className="size-4" />
-        </Link>
-      </div>
 
-      {favoriteOpportunities.length ? (
-        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {favoriteOpportunities.map((opportunity) => (
-            <OpportunityCard
-              key={opportunity.slug}
-              opportunity={opportunity}
-              compact
-              className="h-[545px]"
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="mt-6 rounded-3xl border border-dashed border-zinc-300 bg-[#fbfaf6] p-8 text-center">
-          <p className="text-lg font-semibold text-zinc-950">还没有收藏驻留项目</p>
-          <p className="mt-2 text-sm leading-6 text-zinc-500">
-            去驻留机会页点亮项目卡片右上角的五角星，这里会自动出现你的收藏列表。
-          </p>
-        </div>
-      )}
+        {favoriteOpportunities.length ? (
+          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {favoriteOpportunities.map((opportunity) => (
+              <OpportunityCard key={opportunity.slug} opportunity={opportunity} compact className="h-full" />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-10 border-y border-dashed border-black/30 py-12 text-center">
+            <p className="text-lg font-bold text-zinc-950">还没有收藏驻留项目</p>
+            <p className="mt-3 text-sm leading-7 text-zinc-600">
+              去驻留机会页点亮项目卡片右上角的五角星，这里会自动出现你的收藏列表。
+            </p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

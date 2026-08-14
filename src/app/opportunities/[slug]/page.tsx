@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -20,14 +19,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import {
-  getArtistBySlug,
   getInstitutionBySlug,
   getOpportunityBySlug,
   opportunities,
 } from "@/data/mockData";
 import { ActionButton } from "@/components/ActionButton";
-import { ArtistCard } from "@/components/ArtistCard";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { ResidencyArtwork } from "@/components/ResidencyArtwork";
 import { StatusBadge } from "@/components/StatusBadge";
 
 type OpportunityDetailPageProps = {
@@ -43,7 +41,9 @@ export async function generateMetadata({ params }: OpportunityDetailPageProps) {
   const opportunity = getOpportunityBySlug(slug);
 
   return {
-    title: opportunity ? `${opportunity.title} | ART LINK` : "驻留详情 | ART LINK",
+    title: opportunity
+      ? `${opportunity.title} | Residency Lab 驻留实验室`
+      : "驻留详情 | Residency Lab 驻留实验室",
   };
 }
 
@@ -58,10 +58,12 @@ export default async function OpportunityDetailPage({
   }
 
   const institution = getInstitutionBySlug(opportunity.institutionSlug);
-  const matchedArtists = opportunity.matchArtistSlugs
-    .map((artistSlug) => getArtistBySlug(artistSlug))
-    .filter(Boolean);
-
+  const facts = [
+    { label: "国家 / 城市", value: opportunity.location, icon: MapPin },
+    { label: "周期 / 截止", value: `${opportunity.duration} · ${opportunity.deadline}`, icon: CalendarDays },
+    { label: "成本等级", value: opportunity.costLevel, icon: WalletCards },
+    { label: "语言要求", value: opportunity.languages.join(" / "), icon: Globe2 },
+  ];
   const costSections: Array<{
     title: string;
     icon: LucideIcon;
@@ -104,296 +106,227 @@ export default async function OpportunityDetailPage({
   ];
 
   return (
-    <div className="space-y-6">
-      <Link
-        href="/opportunities"
-        className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-950"
-      >
-        <ArrowLeft className="size-4" />
-        返回驻留机会
-      </Link>
+    <div>
+      <section className="bg-[var(--color-paper)]">
+        <div className="editorial-band-inner !pt-8 lg:!pt-12">
+          <Link
+            href="/opportunities"
+            className="text-arrow-action text-zinc-950"
+            data-direction="back"
+          >
+            <ArrowLeft className="size-4" />
+            返回驻留机会
+          </Link>
 
-      <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-        <div className="relative h-[360px] bg-zinc-100">
-          <Image
-            src={opportunity.image}
-            alt={opportunity.title}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover grayscale-[10%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
-          <FavoriteButton
-            slug={opportunity.slug}
-            title={opportunity.title}
-            className="absolute right-4 top-4 z-10 sm:right-6 sm:top-6"
-          />
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white sm:p-8">
-            <div className="mb-4 flex flex-wrap gap-2">
-              <StatusBadge
-                status={opportunity.status}
-                label={opportunity.statusLabel}
-                className="bg-white/90"
-              />
-              <span className="rounded-md bg-white/15 px-3 py-1 text-xs font-medium">
-                匹配度 {opportunity.matchScore}%
-              </span>
-              <span className="rounded-md bg-white/15 px-3 py-1 text-xs font-medium">
-                {opportunity.costLevel}
-              </span>
+          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] lg:items-stretch">
+            <div className="flex flex-col justify-center py-4 lg:py-10">
+              <div className="flex flex-wrap gap-2">
+                <StatusBadge status={opportunity.status} label={opportunity.statusLabel} className="border-black/20 bg-transparent text-zinc-950" />
+                <span className="rounded-md border border-black/20 px-2 py-1 text-xs font-semibold">
+                  匹配度 {opportunity.matchScore}%
+                </span>
+                <span className="rounded-md border border-black/20 px-2 py-1 text-xs font-semibold">
+                  {opportunity.costLevel}
+                </span>
+              </div>
+              <h1 className="mt-7 max-w-4xl text-5xl font-bold leading-[1.03] tracking-tight sm:text-6xl xl:text-7xl">
+                {opportunity.title}
+              </h1>
+              <p className="mt-6 max-w-3xl text-base leading-8 text-zinc-700">
+                {opportunity.summary}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
+                <ActionButton label="申请驻留" successLabel="申请已记录" />
+                <ActionButton label="收藏驻留" successLabel="已加入收藏" variant="light" />
+                <ActionButton label="联系机构" successLabel="联系请求已发送" variant="light" />
+              </div>
             </div>
-            <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-              {opportunity.title}
-            </h1>
-            <p className="mt-4 max-w-3xl text-sm leading-6 text-zinc-100 sm:text-base">
-              {opportunity.summary}
-            </p>
+
+            <div className="relative min-h-[360px] overflow-hidden lg:min-h-[560px]">
+              <ResidencyArtwork
+                slug={opportunity.slug}
+                category={opportunity.category}
+              />
+              <FavoriteButton
+                slug={opportunity.slug}
+                title={opportunity.title}
+                className="absolute right-4 top-4 z-10 sm:right-6 sm:top-6"
+              />
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="grid gap-8 p-6 lg:grid-cols-[minmax(0,1fr)_360px] sm:p-8">
-          <div className="space-y-8">
-            <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
-                <MapPin className="size-5 text-zinc-500" />
-                <p className="mt-3 text-sm text-zinc-500">国家 / 城市</p>
-                <p className="mt-1 font-semibold">{opportunity.location}</p>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
-                <CalendarDays className="size-5 text-zinc-500" />
-                <p className="mt-3 text-sm text-zinc-500">周期 / 截止</p>
-                <p className="mt-1 font-semibold">
-                  {opportunity.duration} · {opportunity.deadline}
-                </p>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
-                <WalletCards className="size-5 text-zinc-500" />
-                <p className="mt-3 text-sm text-zinc-500">成本等级</p>
-                <p className="mt-1 font-semibold">{opportunity.costLevel}</p>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
-                <Globe2 className="size-5 text-zinc-500" />
-                <p className="mt-3 text-sm text-zinc-500">语言要求</p>
-                <p className="mt-1 font-semibold">{opportunity.languages.join(" / ")}</p>
-              </div>
-            </section>
+      <section className="bg-[var(--tone-paper-soft)]">
+        <div className="editorial-band-inner">
+          <div className="grid grid-cols-2 border-t border-black/25 lg:grid-cols-4">
+            {facts.map((fact) => {
+              const Icon = fact.icon;
+              return (
+                <div
+                  key={fact.label}
+                  className="border-b border-black/20 py-6 pr-4 odd:border-r lg:border-b-0 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-zinc-600">{fact.label}</p>
+                    <Icon className="size-4 text-zinc-600" />
+                  </div>
+                  <p className="mt-4 text-base font-bold">{fact.value}</p>
+                </div>
+              );
+            })}
+          </div>
 
-            <section>
-              <h2 className="text-xl font-semibold">为什么推荐给你</h2>
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="mt-16 grid gap-12 lg:grid-cols-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-600">Project overview</p>
+              <h2 className="mt-4 text-4xl font-bold tracking-tight">项目介绍</h2>
+              <p className="mt-6 text-base leading-8 text-zinc-700">{opportunity.description}</p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-600">Personal fit</p>
+              <h2 className="mt-4 text-4xl font-bold tracking-tight">为什么推荐给你</h2>
+              <div className="mt-6">
                 {opportunity.fitReasons.map((reason) => (
-                  <div
-                    key={reason}
-                    className="flex gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-900"
-                  >
+                  <div key={reason} className="flex gap-3 border-t border-black/20 py-4 text-sm leading-6 text-zinc-700">
                     <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
                     {reason}
                   </div>
                 ))}
               </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold">项目介绍</h2>
-              <p className="mt-4 text-base leading-8 text-zinc-600">
-                {opportunity.description}
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold">真实成本</h2>
-              <div className="mt-4 grid gap-4">
-                {costSections.map((section) => {
-                  const SectionIcon = section.icon;
-
-                  return (
-                  <div
-                    key={section.title}
-                    className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 shadow-[0_10px_22px_rgba(0,0,0,0.04)]"
-                  >
-                    <div className="flex gap-3">
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-white">
-                        <SectionIcon className="size-5" />
-                      </span>
-                      <div>
-                        <h3 className="text-base font-semibold text-zinc-950">
-                          {section.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 grid gap-3 md:grid-cols-2">
-                      {section.items.map((item) => {
-                        const ItemIcon = item.icon;
-
-                        return (
-                          <div
-                            key={item.label}
-                            className="flex gap-3 rounded-2xl border border-zinc-200 bg-white p-4"
-                          >
-                            <ItemIcon className="mt-0.5 size-4 shrink-0 text-zinc-500" />
-                            <div>
-                              <p className="text-sm text-zinc-500">{item.label}</p>
-                              <p className="mt-2 text-sm font-medium leading-6 text-zinc-800">
-                                {item.value}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section className="grid gap-6 md:grid-cols-2">
-              <div>
-                <h2 className="text-xl font-semibold">申请材料清单</h2>
-                <ul className="mt-4 space-y-3">
-                  {opportunity.requirements.map((item) => (
-                    <li key={item} className="flex gap-3 text-sm leading-6 text-zinc-600">
-                      <span className="mt-2 size-1.5 rounded-full bg-zinc-950" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold">关键时间</h2>
-                <ul className="mt-4 space-y-3">
-                  {opportunity.timeline.map((item) => (
-                    <li key={item} className="flex gap-3 text-sm leading-6 text-zinc-600">
-                      <span className="mt-2 size-1.5 rounded-full bg-zinc-950" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
-
-            <section className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-2xl border border-zinc-200 bg-white p-5">
-                <h2 className="text-xl font-semibold">机构介绍</h2>
-                <p className="mt-4 text-sm leading-7 text-zinc-600">
-                  {opportunity.institutionIntro}
-                </p>
-                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-emerald-700">
-                  <ShieldCheck className="size-4" />
-                  {opportunity.institutionCertification}
-                </div>
-              </div>
-              <div className="rounded-2xl border border-zinc-200 bg-white p-5">
-                <h2 className="text-xl font-semibold">往届案例</h2>
-                <ul className="mt-4 space-y-3 text-sm leading-6 text-zinc-600">
-                  {opportunity.pastCases.map((item) => (
-                    <li key={item}>· {item}</li>
-                  ))}
-                </ul>
-              </div>
-            </section>
-
-            <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-              <h2 className="text-xl font-semibold">版权与作品使用说明</h2>
-              <p className="mt-4 text-sm leading-7 text-zinc-600">
-                {opportunity.copyrightNote}
-              </p>
-              <p className="mt-3 text-sm leading-7 text-zinc-600">
-                {opportunity.visaNote}
-              </p>
-            </section>
+            </div>
           </div>
-
-          <aside className="space-y-5">
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
-              <p className="text-sm text-zinc-500">发布机构</p>
-              <p className="mt-2 text-xl font-semibold">{opportunity.institution}</p>
-              {institution ? (
-                <p className="mt-3 text-sm leading-6 text-zinc-500">
-                  {institution.description}
-                </p>
-              ) : null}
-              <div className="mt-5 flex flex-col gap-3">
-                <ActionButton label="申请驻留" successLabel="申请已记录" />
-                <ActionButton
-                  label="收藏驻留"
-                  successLabel="已加入收藏"
-                  variant="light"
-                />
-                <ActionButton
-                  label="联系机构"
-                  successLabel="联系请求已发送"
-                  variant="light"
-                />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5">
-              <p className="text-sm text-zinc-500">适合媒介</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {opportunity.disciplines.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-zinc-200 px-3 py-1 text-sm text-zinc-500"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5">
-              <p className="text-sm text-zinc-500">申请资格</p>
-              <div className="mt-4 space-y-3 text-sm text-zinc-600">
-                <p>接受国际申请者：{opportunity.acceptsInternational ? "是" : "否"}</p>
-                <p>适合青年艺术家：{opportunity.suitableForYoungArtists ? "是" : "否"}</p>
-                <p>接受学生申请：{opportunity.acceptsStudents ? "是" : "否"}</p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5">
-              <p className="text-sm text-zinc-500">风险提示</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {opportunity.riskTags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm text-zinc-500"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </aside>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5">
-        <div className="mb-5 flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold">可能适合的申请者</h2>
-            <p className="mt-1 text-sm text-zinc-500">
-              机构端可以按媒介、阶段、语言和材料完整度筛选申请者。
-            </p>
+      <section className="bg-[var(--color-lilac)]">
+        <div className="editorial-band-inner">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-700">Cost transparency</p>
+          <h2 className="mt-5 text-5xl font-bold tracking-tight sm:text-6xl">真实成本</h2>
+          <div className="mt-14 grid gap-x-8 gap-y-12 lg:grid-cols-2">
+            {costSections.map((section) => {
+              const SectionIcon = section.icon;
+              return (
+                <article key={section.title} className="border-t border-black/25 py-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="text-2xl font-bold">{section.title}</h3>
+                    <SectionIcon className="size-5" />
+                  </div>
+                  <div className="mt-6">
+                    {section.items.map((item) => {
+                      const ItemIcon = item.icon;
+                      return (
+                        <div key={item.label} className="grid grid-cols-[24px_110px_1fr] gap-3 border-t border-black/15 py-4 text-sm leading-6">
+                          <ItemIcon className="mt-1 size-4 text-zinc-600" />
+                          <p className="font-semibold text-zinc-700">{item.label}</p>
+                          <p className="text-zinc-700">{item.value}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </article>
+              );
+            })}
           </div>
-          <Link
-            href="/artists"
-            className="inline-flex h-10 items-center rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
-          >
-            查看作品集主页
-          </Link>
         </div>
+      </section>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {matchedArtists.map((artist) => {
-            if (!artist) {
-              return null;
-            }
+      <section className="bg-[var(--color-mist)]">
+        <div className="editorial-band-inner">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-700">Application preparation</p>
+          <h2 className="mt-5 text-5xl font-bold tracking-tight sm:text-6xl">申请准备</h2>
+          <div className="mt-14 grid gap-12 md:grid-cols-2">
+            <div className="border-t border-black/25 py-6">
+              <h3 className="text-2xl font-bold">申请材料清单</h3>
+              <ul className="mt-6">
+                {opportunity.requirements.map((item) => (
+                  <li key={item} className="flex gap-3 border-t border-black/15 py-4 text-sm leading-6 text-zinc-700">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-zinc-950" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="border-t border-black/25 py-6">
+              <h3 className="text-2xl font-bold">关键时间</h3>
+              <ul className="mt-6">
+                {opportunity.timeline.map((item) => (
+                  <li key={item} className="flex gap-3 border-t border-black/15 py-4 text-sm leading-6 text-zinc-700">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-zinc-950" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            return <ArtistCard key={artist.slug} artist={artist} />;
-          })}
+      <section className="bg-[var(--color-paper)]">
+        <div className="editorial-band-inner">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-700">Institution and terms</p>
+          <h2 className="mt-5 text-5xl font-bold tracking-tight sm:text-6xl">机构与申请条件</h2>
+          <div className="mt-14 grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="space-y-10">
+              <article className="border-t border-black/25 py-6">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-zinc-700">发布机构</p>
+                    <h3 className="mt-2 text-3xl font-bold">{opportunity.institution}</h3>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-emerald-900">
+                    <ShieldCheck className="size-4" />
+                    {opportunity.institutionCertification}
+                  </div>
+                </div>
+                <p className="mt-6 text-sm leading-7 text-zinc-700">
+                  {institution?.description ?? opportunity.institutionIntro}
+                </p>
+              </article>
+
+              <article className="border-t border-black/25 py-6">
+                <h3 className="text-2xl font-bold">往届案例</h3>
+                <ul className="mt-5 space-y-3 text-sm leading-7 text-zinc-700">
+                  {opportunity.pastCases.map((item) => <li key={item}>· {item}</li>)}
+                </ul>
+              </article>
+
+              <article className="border-t border-black/25 py-6">
+                <h3 className="text-2xl font-bold">版权、签证与作品使用</h3>
+                <p className="mt-5 text-sm leading-7 text-zinc-700">{opportunity.copyrightNote}</p>
+                <p className="mt-3 text-sm leading-7 text-zinc-700">{opportunity.visaNote}</p>
+              </article>
+            </div>
+
+            <aside className="space-y-8">
+              <div className="border-t border-black/25 py-6">
+                <h3 className="text-xl font-bold">适合媒介</h3>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {opportunity.disciplines.map((tag) => (
+                    <span key={tag} className="rounded-md border border-black/20 px-3 py-1 text-sm text-zinc-700">{tag}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-black/25 py-6">
+                <h3 className="text-xl font-bold">申请资格</h3>
+                <div className="mt-5 space-y-3 text-sm text-zinc-700">
+                  <p>接受国际申请者：{opportunity.acceptsInternational ? "是" : "否"}</p>
+                  <p>适合青年艺术家：{opportunity.suitableForYoungArtists ? "是" : "否"}</p>
+                  <p>接受学生申请：{opportunity.acceptsStudents ? "是" : "否"}</p>
+                </div>
+              </div>
+
+              <div className="border-t border-black/25 py-6">
+                <h3 className="text-xl font-bold">风险提示</h3>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {opportunity.riskTags.map((tag) => (
+                    <span key={tag} className="rounded-md border border-black/20 px-3 py-1 text-sm text-zinc-700">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
     </div>

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "消息通知 | ART LINK",
+  title: "消息通知 | Residency Lab 驻留实验室",
 };
 
 const notifications = [
@@ -35,85 +35,61 @@ const notifications = [
     icon: CheckCircle2,
   },
   {
-    title: "驻留机构已查看你的作品集主页",
-    description: "机构端正在筛选影像、新媒体和城市研究方向的申请者。",
+    title: "你收藏的驻留项目即将截止申请",
+    description: "建议检查作品集、项目计划和预算版本，再决定是否加入申请清单。",
     time: "7 月 1 日",
-    type: "机构消息",
+    type: "截止提醒",
     icon: MessageCircle,
   },
 ];
 
 export default function NotificationsPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <section className="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8">
-        <p className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.16em] text-emerald-700">
-          <Bell className="size-4" />
-          Notifications
-        </p>
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight text-zinc-950 sm:text-5xl">
-          消息通知
-        </h1>
-        <p className="mt-4 max-w-3xl text-sm leading-7 text-zinc-500">
-          集中查看截止日期、材料准备、机构沟通和驻留项目更新，避免重要申请节点被淹没。
-        </p>
+    <div>
+      <section className="bg-[var(--color-mist)]">
+        <div className="editorial-band-inner">
+          <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-700">
+            <Bell className="size-4" /> Notifications
+          </p>
+          <h1 className="mt-5 text-5xl font-bold tracking-tight sm:text-6xl">消息通知</h1>
+          <p className="mt-6 max-w-3xl text-base leading-8 text-zinc-700">
+            集中查看截止日期、材料准备、申请进度和驻留项目更新，避免重要申请节点被淹没。
+          </p>
+        </div>
       </section>
 
-      <section className="space-y-4">
-        {notifications.map((notification) => {
-          const Icon = notification.icon;
+      <section className="bg-[var(--tone-mist-soft)]">
+        <div className="editorial-band-inner">
+          <div className="border-t border-black/25">
+            {notifications.map((notification) => {
+              const Icon = notification.icon;
 
-          return (
-            <article
-              key={notification.title}
-              className="rounded-3xl border border-zinc-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm"
-            >
-              <div className="flex gap-4">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-white">
-                  <Icon className="size-5" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border border-zinc-200 bg-[#fbfaf6] px-3 py-1 text-xs text-zinc-500">
-                        {notification.type}
-                      </span>
-                      <span className="text-xs text-zinc-400">{notification.time}</span>
-                    </div>
+              return (
+                <article key={notification.title} className="grid gap-5 border-b border-black/20 py-7 sm:grid-cols-[40px_minmax(0,1fr)_auto] sm:items-start">
+                  <Icon className="size-6" />
+                  <div className="min-w-0">
+                    <span className="inline-flex bg-[var(--color-mist)] px-2.5 py-1 text-xs font-bold text-zinc-800">{notification.type}</span>
+                    <h2 className="mt-4 text-xl font-bold text-zinc-950">{notification.title}</h2>
+                    <p className="mt-2 max-w-3xl text-sm leading-7 text-zinc-600">{notification.description}</p>
                   </div>
-                  <h2 className="mt-3 text-xl font-semibold text-zinc-950">
-                    {notification.title}
-                  </h2>
-                  <p className="mt-2 text-sm leading-6 text-zinc-500">
-                    {notification.description}
-                  </p>
-                </div>
-              </div>
-            </article>
-          );
-        })}
+                  <time className="text-xs font-semibold text-zinc-500">{notification.time}</time>
+                </article>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
-      <section className="rounded-3xl border border-zinc-200 bg-zinc-950 p-6 text-white sm:p-8">
-        <h2 className="text-2xl font-semibold">下一步行动</h2>
-        <p className="mt-3 text-sm leading-6 text-zinc-300">
-          根据当前提醒，优先处理英文材料、项目计划和即将截止的驻留申请。
-        </p>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href="/materials"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-medium text-zinc-950"
-          >
-            打开材料助手
-            <ArrowRight className="size-4" />
-          </Link>
-          <Link
-            href="/applications"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-white/20 bg-zinc-950 px-5 text-sm font-medium text-white"
-          >
-            查看申请清单
-            <ArrowRight className="size-4" />
-          </Link>
+      <section className="bg-[var(--tone-mist-deep)] text-[var(--color-ink)]">
+        <div className="editorial-band-inner">
+          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">下一步行动</h2>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-zinc-700">
+            根据当前提醒，优先处理英文材料、项目计划和即将截止的驻留申请。
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-10">
+            <Link href="/materials" className="text-arrow-action">打开材料助手<ArrowRight className="size-4" /></Link>
+            <Link href="/applications" className="text-arrow-action">查看申请清单<ArrowRight className="size-4" /></Link>
+          </div>
         </div>
       </section>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ActionButtonProps = {
@@ -34,15 +34,15 @@ export function ActionButton({
       aria-live="polite"
       onClick={() => setDone(true)}
       className={cn(
-        "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition",
+        "text-arrow-action group",
         variant === "dark"
-          ? "bg-zinc-950 text-white hover:bg-zinc-800"
-          : "border border-zinc-200 bg-white text-zinc-950 hover:border-zinc-300 hover:bg-zinc-50",
+          ? "text-zinc-950"
+          : "text-zinc-700",
         className,
       )}
     >
-      {done ? <Check className="size-4" /> : null}
       {done ? successLabel : label}
+      <ArrowRight className="size-4" />
     </button>
   );
 }

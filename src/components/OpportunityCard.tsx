@@ -1,23 +1,101 @@
-import Image from "next/image";
 import Link from "next/link";
-import { BedDouble, CalendarDays, Globe2, MapPin, WalletCards } from "lucide-react";
+import { ArrowRight, BadgeCheck, BedDouble, CalendarDays, Globe2, MapPin, WalletCards } from "lucide-react";
 import type { Opportunity } from "@/data/mockData";
 import { ActionButton } from "@/components/ActionButton";
 import { FavoriteButton } from "@/components/FavoriteButton";
-import { StatusBadge } from "@/components/StatusBadge";
+import { ResidencyArtwork } from "@/components/ResidencyArtwork";
 import { cn } from "@/lib/utils";
 
 type OpportunityCardProps = {
   opportunity: Opportunity;
   compact?: boolean;
+  appearance?: "surface" | "editorial";
   className?: string;
 };
+
+const advantagePriority = [
+  "适合首次驻留",
+  "适合青年艺术家",
+  "接受学生申请",
+  "接受中国申请者",
+  "接受国际申请者",
+];
+
+function selectConditionTag(opportunity: Opportunity) {
+  if (
+    opportunity.costs.applicationFee.includes("无申请费") ||
+    opportunity.trustTags.includes("无申请费")
+  ) {
+    return "无申请费";
+  }
+
+  const accommodationTag = opportunity.trustTags.find((tag) =>
+    tag.includes("住宿补贴"),
+  );
+  if (accommodationTag || opportunity.costs.accommodation.includes("住宿补贴")) {
+    return accommodationTag ?? "提供住宿补贴";
+  }
+
+  if (
+    opportunity.trustTags.some((tag) => tag.includes("提供住宿")) ||
+    (opportunity.costs.accommodation.includes("提供") &&
+      !opportunity.costs.accommodation.includes("自理") &&
+      !opportunity.costs.accommodation.includes("未说明"))
+  ) {
+    return "提供住宿";
+  }
+
+  if (
+    opportunity.trustTags.some((tag) => tag.includes("提供工作室")) ||
+    opportunity.costs.studio.includes("提供")
+  ) {
+    return "提供工作室";
+  }
+
+  return opportunity.trustTags.includes("费用透明") ? "费用透明" : undefined;
+}
+
+function selectAdvantageTag(opportunity: Opportunity) {
+  return advantagePriority.find((tag) => opportunity.trustTags.includes(tag));
+}
+
+function selectRiskTag(opportunity: Opportunity) {
+  if (
+    opportunity.costLevel === "高成本" ||
+    opportunity.riskTags.some((tag) => tag.includes("项目费较高"))
+  ) {
+    return "项目费较高";
+  }
+
+  const riskPriority = [
+    /住宿需自理|住宿未说明|住宿需确认/,
+    /无生活补贴|生活补贴未说明|仅提供住宿补贴/,
+    /需自理机票|需自理交通|交通需自理/,
+    /需自备/,
+    /需英文材料/,
+  ];
+
+  for (const pattern of riskPriority) {
+    const match = opportunity.riskTags.find((tag) => pattern.test(tag));
+    if (match) {
+      return match;
+    }
+  }
+
+  return opportunity.riskTags[0];
+}
 
 export function OpportunityCard({
   opportunity,
   compact = false,
+  appearance = "surface",
   className,
 }: OpportunityCardProps) {
+  const editorial = appearance === "editorial";
+  const showStatus = opportunity.status === "closing" || opportunity.status === "reviewing";
+  const conditionTag = selectConditionTag(opportunity);
+  const advantageTag = selectAdvantageTag(opportunity);
+  const riskTag = selectRiskTag(opportunity);
   const facts = [
     `${opportunity.country} / ${opportunity.city}`,
     opportunity.duration,
@@ -28,23 +106,44 @@ export function OpportunityCard({
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-3xl border border-zinc-200 bg-white transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-sm",
+        editorial
+          ? "border-t border-black/25"
+          : "border border-zinc-200 transition hover:-translate-y-0.5 hover:border-zinc-300",
         compact ? "flex h-full flex-col" : "",
         className,
       )}
     >
-      <div className={cn("relative bg-zinc-100", compact ? "h-28" : "h-40")}>
-        <Link href={`/opportunities/${opportunity.slug}`} className="block h-full">
-          <Image
-            src={opportunity.image}
-            alt={opportunity.title}
-            fill
-            sizes="(min-width: 1280px) 320px, (min-width: 768px) 50vw, 100vw"
-            className="object-cover grayscale-[10%]"
+      <div className="flex h-6 items-end">
+        {showStatus ? (
+          <span
+            className={cn(
+              "inline-flex h-6 w-[136px] items-center justify-start px-2.5 text-left text-[11px] font-bold text-[var(--color-paper)]",
+              opportunity.status === "closing"
+                ? "bg-[#75483A]"
+                : "bg-[#365563]",
+            )}
+          >
+            {opportunity.statusLabel}
+          </span>
+        ) : null}
+      </div>
+
+      <div
+        className={cn(
+          "relative bg-zinc-100",
+          compact ? (editorial ? "h-48" : "h-28") : "h-40",
+          editorial ? "overflow-hidden" : "",
+        )}
+      >
+        <Link
+          href={`/opportunities/${opportunity.slug}`}
+          className="relative block h-full"
+          aria-label={`查看${opportunity.title}详情`}
+        >
+          <ResidencyArtwork
+            slug={opportunity.slug}
+            category={opportunity.category}
           />
-          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-zinc-950">
-            匹配度 {opportunity.matchScore}%
-          </div>
         </Link>
         <FavoriteButton
           slug={opportunity.slug}
@@ -55,32 +154,45 @@ export function OpportunityCard({
 
       <div
         className={cn(
+          "flex-1 bg-white",
           compact
-            ? "min-h-0 flex-1 space-y-3 overflow-hidden p-3"
+            ? "space-y-3 p-4"
             : "space-y-4 p-4",
         )}
       >
-        <div className={cn("flex items-start justify-between", compact ? "gap-2" : "gap-3")}>
+        <div className={cn("flex items-start justify-between", compact ? "gap-3" : "gap-4")}>
           <Link
             href={`/opportunities/${opportunity.slug}`}
             className={cn(
-              "line-clamp-2 font-semibold text-zinc-950 hover:underline",
+              "min-w-0 line-clamp-2 font-semibold text-zinc-950 hover:underline",
               compact ? "text-sm leading-5" : "text-base leading-6",
             )}
           >
             {opportunity.title}
           </Link>
-          <StatusBadge
-            status={opportunity.status}
-            label={opportunity.statusLabel}
-            className="shrink-0"
-          />
+          <div className="shrink-0 text-right text-zinc-950">
+            <p className="text-[10px] font-bold leading-none tracking-[0.08em] text-zinc-500">匹配度</p>
+            <p className={cn("mt-1 font-bold leading-none tracking-tight", compact ? "text-[30px]" : "text-[32px]")}>
+              {opportunity.matchScore}%
+            </p>
+          </div>
         </div>
 
         <div>
-          <p className={cn("text-zinc-600", compact ? "text-xs" : "text-sm")}>
-            {opportunity.institution}
-          </p>
+          <div className="flex items-center gap-1.5">
+            <p className={cn("min-w-0 truncate text-zinc-600", compact ? "text-xs" : "text-sm")}>
+              {opportunity.institution}
+            </p>
+            {opportunity.institutionCertification === "机构已认证" ? (
+              <span
+                className="shrink-0 text-zinc-700"
+                aria-label="已认证机构"
+                title="已认证机构"
+              >
+                <BadgeCheck className="size-4" aria-hidden="true" />
+              </span>
+            ) : null}
+          </div>
           <p
             className={cn(
               "mt-2 flex items-center gap-1 text-zinc-500",
@@ -94,64 +206,56 @@ export function OpportunityCard({
 
         <div
           className={cn(
-            "grid text-zinc-600",
-            compact ? "grid-cols-1 gap-1.5 text-[11px] leading-4" : "gap-2 text-xs sm:grid-cols-2",
+            "grid gap-0 border-y border-black/15 text-zinc-600",
+            compact ? "grid-cols-1 text-[11px] leading-4" : "text-xs sm:grid-cols-2",
           )}
         >
-          <p className={cn("flex items-center gap-2 rounded-lg bg-zinc-50", compact ? "px-2 py-1.5" : "px-3 py-2")}>
+          <p className={cn("flex items-center gap-2 border-b border-black/10 last:border-b-0", compact ? "px-2 py-1.5" : "px-3 py-2")}>
             <WalletCards className="size-3.5" />
             {opportunity.costs.applicationFee} / {opportunity.costs.programFee}
           </p>
-          <p className={cn("flex items-center gap-2 rounded-lg bg-zinc-50", compact ? "px-2 py-1.5" : "px-3 py-2")}>
+          <p className={cn("flex items-center gap-2 border-b border-black/10 last:border-b-0", compact ? "px-2 py-1.5" : "px-3 py-2")}>
             <BedDouble className="size-3.5" />
             {opportunity.costs.accommodation}
           </p>
-          <p className={cn("flex items-center gap-2 rounded-lg bg-zinc-50", compact ? "px-2 py-1.5" : "px-3 py-2")}>
+          <p className={cn("flex items-center gap-2 border-b border-black/10 last:border-b-0", compact ? "px-2 py-1.5" : "px-3 py-2")}>
             <CalendarDays className="size-3.5" />
             {opportunity.costs.stipend}
           </p>
-          <p className={cn("flex items-center gap-2 rounded-lg bg-zinc-50", compact ? "px-2 py-1.5" : "px-3 py-2")}>
+          <p className={cn("flex items-center gap-2 border-b border-black/10 last:border-b-0", compact ? "px-2 py-1.5" : "px-3 py-2")}>
             <Globe2 className="size-3.5" />
             {opportunity.languages.join(" / ")}
           </p>
         </div>
 
-        <div className={cn("flex flex-wrap", compact ? "gap-1.5" : "gap-2")}>
-          {opportunity.trustTags.slice(0, compact ? 3 : 5).map((tag) => (
-            <span
-              key={tag}
-              className={cn(
-                "rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700",
-                compact ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
-              )}
-            >
-              {tag}
-            </span>
-          ))}
-          {opportunity.riskTags.slice(0, compact ? 1 : 3).map((tag) => (
-            <span
-              key={tag}
-              className={cn(
-                "rounded-full border border-amber-200 bg-amber-50 text-amber-700",
-                compact ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
-              )}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <p className={cn("line-clamp-3 text-zinc-500", compact ? "text-xs leading-5" : "text-sm leading-6")}>
-          {opportunity.recommendation}
-        </p>
+        {conditionTag || advantageTag || riskTag ? (
+          <div className="flex flex-wrap gap-y-1">
+            {conditionTag ? (
+              <span className={cn("bg-[var(--color-mist)] px-2.5 py-1 font-semibold text-[var(--color-ink)]", compact ? "text-[11px]" : "text-xs")}>
+                {conditionTag}
+              </span>
+            ) : null}
+            {advantageTag ? (
+              <span className={cn("bg-[var(--color-sage)] px-2.5 py-1 font-semibold text-[var(--color-ink)]", compact ? "text-[11px]" : "text-xs")}>
+                {advantageTag}
+              </span>
+            ) : null}
+            {riskTag ? (
+              <span className={cn("bg-[var(--color-clay)] px-2.5 py-1 font-semibold text-[var(--color-ink)]", compact ? "text-[11px]" : "text-xs")}>
+                {riskTag}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         {!compact ? (
           <div className="flex flex-col gap-2 sm:flex-row">
             <Link
               href={`/opportunities/${opportunity.slug}`}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-zinc-950 px-4 text-sm font-medium text-white transition hover:bg-zinc-800"
+              className="text-arrow-action text-zinc-950"
             >
               查看详情
+              <ArrowRight className="size-4" />
             </Link>
             <ActionButton
               label="加入申请清单"

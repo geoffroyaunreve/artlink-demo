@@ -1,5 +1,5 @@
-export const FAVORITES_STORAGE_KEY = "artlink.favoriteResidencies";
-export const FAVORITES_UPDATED_EVENT = "artlink:favorites-updated";
+export const FAVORITES_STORAGE_KEY = "residencylab.favoriteResidencies";
+export const FAVORITES_UPDATED_EVENT = "residencylab:favorites-updated";
 
 export function readFavoriteSlugs() {
   if (typeof window === "undefined") {
